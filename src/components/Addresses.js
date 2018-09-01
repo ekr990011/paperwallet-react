@@ -8,7 +8,13 @@ class Addresses extends Component {
   }
 
   createAddresses(address) {
-    return <li key={address.key}>{address.text}</li>
+    return <li 
+                key={address.key}>{address.text}
+                {" "} <button onClick={() => this.delete(address.key)}>remove</button> </li>
+  }
+
+  delete(key) {
+    this.props.delete(key);
   }
 
   render() {

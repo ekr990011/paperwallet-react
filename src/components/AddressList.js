@@ -9,6 +9,7 @@ class AddressList extends Component {
       addresses: []
     };
     this.addAddress = this.addAddress.bind(this);
+    this.deleteAddress = this.deleteAddress.bind(this);
   }
 
   addAddress(e) {
@@ -32,6 +33,18 @@ class AddressList extends Component {
     e.preventDefault();
   }
 
+  deleteAddress(key) { 
+    var filteredAddresses = this.state.addresses.filter(function (address) {
+      return (address.key !== key)
+    });
+
+    console.log("filteredAddress" + filteredAddresses)
+
+    this.setState({
+      addresses: filteredAddresses
+    });
+  }
+
   render(){
     return (
       <div className="addressList">
@@ -42,7 +55,8 @@ class AddressList extends Component {
             <button type="submit">Enter a New PaperWallet</button>
           </form>
         </div>
-        <Addresses entries={this.state.addresses}/>
+        <Addresses entries={this.state.addresses}
+                    delete={this.deleteAddress}/>
       </div>
     );
   }
