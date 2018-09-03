@@ -1,5 +1,14 @@
 import React, { Component } from "react";
 import Addresses from './Addresses';
+import WAValidator from 'wallet-address-validator';
+
+
+var valid = WAValidator.validate('1KFzzGtDdnq5hrwxXGjwVnKzRbvf8WVxck', 'BTC');
+if(valid)
+	console.log('This is a valid address');
+else
+  console.log('Address INVALID');
+  
 
 class AddressList extends Component {
   constructor(props) {
@@ -12,8 +21,10 @@ class AddressList extends Component {
     this.deleteAddress = this.deleteAddress.bind(this);
   }
 
+
   addAddress(e) {
-    if (this._inputElement.value !== "") {
+    if (this._inputElement.value !== ""
+              && WAValidator.validate(this._inputElement.value))  {
       var newAddress = {
         text: this._inputElement.value,
         key: Date.now()
@@ -24,6 +35,8 @@ class AddressList extends Component {
           addresses: prevState.addresses.concat(newAddress)
         };
       });
+    } else {
+      alert("Please enter a valid address");
     }
 
     this._inputElement.value = "";
