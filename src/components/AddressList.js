@@ -56,6 +56,7 @@ class AddressList extends Component {
 
   deleteAddress(key) { 
     var filteredAddresses = this.state.addresses.filter(function (address) {
+      console.log(address);
       return (address.key !== key)
     });
 
