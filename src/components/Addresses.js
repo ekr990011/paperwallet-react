@@ -8,9 +8,13 @@ class Addresses extends Component {
   }
 
   createAddresses(address) {
-    return <li 
-                key={address.key}>{address.text}
-                {" "} <button onClick={() => this.delete(address.key)}>remove</button> </li>
+    console.log(address);
+    return <li key={address.key}>
+      {address.text} {" "}
+      {address.cryptoAmount} {" "}
+      {address.fiatAmount}
+      {" "} <button onClick={() => this.delete(address.key)}>remove</button> 
+    </li>
   }
 
   delete(key) {

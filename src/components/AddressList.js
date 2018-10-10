@@ -28,8 +28,6 @@ class AddressList extends Component {
       
       const checkDuplicateArray = (addObject.map(a => a.key));
       const duplicate = checkDuplicateArray.includes(this._inputElement.value);
-      console.log(duplicate); 
-      console.log(this._inputElement.value);
       if (duplicate) {
         alert("you have entered a duplicte address");
 
@@ -37,7 +35,9 @@ class AddressList extends Component {
                 && WAValidator.validate(this._inputElement.value))  {
         var newAddress = {
           text: this._inputElement.value,
-          key: this._inputElement.value
+          key: this._inputElement.value,
+          cryptoAmount: 0,
+          fiatAmount: 0
         };
 
         this.setState((prevState) => {
