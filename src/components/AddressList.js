@@ -24,21 +24,40 @@ class AddressList extends Component {
   }
   
   bitcoinAmountCheck() {
+    this.setState(() => {
+      return {
+        addresses: []
+      };
+    });
     const addresses = this.state.addresses.map(a => a.key);
-    console.log(addresses);
-    console.log("sapce");
-    console.log(addresses.toString().replace(/,/g, '|'));
     
     axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
       .then(res => {
         const data = res.data;
-        // this.setState({ persons });
-        console.log(data);
+        let i;
+        for (i = 0; i < addresses.length; i++) {
+          const addressBalance = data[addresses[i]].final_balance / 100000000;
+          // var address = addressesState.find(function (obj) { return obj.key === addresses[i]; });
+          const newAddress = {
+            text: addresses[i],
+            key: addresses[i],
+            cryptoAmount: addressBalance,
+            fiatAmount: addressBalance * 6000
+          };
+          this.setState((prevState) => {
+            return {
+              addresses: prevState.addresses.concat(newAddress)
+            };
+          });
+        }
       })
   }
   
   checkBalance(event) {
     this.bitcoinAmountCheck();
+    
+    const addressesState = this.state.addresses;
+    console.log(addressesState);
     
     event.preventDefault();
   }
