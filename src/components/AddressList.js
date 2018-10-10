@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Addresses from './Addresses';
 import WAValidator from 'wallet-address-validator';
+import axios from 'axios';
 
 
 // var valid = WAValidator.validate('1KFzzGtDdnq5hrwxXGjwVnKzRbvf8WVxck', 'BTC');
@@ -19,11 +20,31 @@ class AddressList extends Component {
     };
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
+    this.checkBalance = this.checkBalance.bind(this);
+  }
+  
+  bitcoinAmountCheck() {
+    const addresses = this.state.addresses.map(a => a.key);
+    console.log(addresses);
+    console.log("sapce");
+    console.log(addresses.toString().replace(/,/g, '|'));
+    
+    axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
+      .then(res => {
+        const data = res.data;
+        // this.setState({ persons });
+        console.log(data);
+      })
+  }
+  
+  checkBalance(event) {
+    this.bitcoinAmountCheck();
+    
+    event.preventDefault();
   }
 
 
-  addAddress(e) {
-    
+  addAddress(event) {
       const addObject = this.state.addresses;
       
       const checkDuplicateArray = (addObject.map(a => a.key));
@@ -50,8 +71,8 @@ class AddressList extends Component {
       }
 
       this._inputElement.value = "";
-
-      e.preventDefault();
+      
+      event.preventDefault();
   }
 
   deleteAddress(key) { 
@@ -76,6 +97,7 @@ class AddressList extends Component {
             </input>
             <button type="submit">Enter a New PaperWallet</button>
           </form>
+          <button type="balance" onClick={this.checkBalance}>Check Balance</button>
         </div>
         <Addresses entries={this.state.addresses}
                     delete={this.deleteAddress}/>

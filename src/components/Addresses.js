@@ -8,7 +8,6 @@ class Addresses extends Component {
   }
 
   createAddresses(address) {
-    console.log(address);
     return <li key={address.key}>
       {address.text} {" "}
       {address.cryptoAmount} {" "}
