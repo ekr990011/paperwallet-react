@@ -4,7 +4,7 @@ class Addresses extends Component {
   constructor(props) {
     super(props);
 
-    this.createAddresses=this.createAddresses.bind(this)
+    this.createAddresses = this.createAddresses.bind(this)
   }
 
   createAddresses(address) {

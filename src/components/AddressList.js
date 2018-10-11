@@ -28,7 +28,7 @@ class AddressList extends Component {
     axios.get("https://api.coinmarketcap.com/v2/ticker/" + "1" + "/")
       .then(res => {
         const price = res.data.data.quotes.USD.price;
-        this.props.fiatPrice(price);
+        this.props.handlefiatPrice(price);
       })
   }
   
@@ -51,9 +51,7 @@ class AddressList extends Component {
             text: addresses[i],
             key: addresses[i],
             cryptoAmount: addressBalance,
-            
-            // fix this too
-            fiatAmount: addressBalance * 6000
+            fiatAmount: addressBalance * this.props.fiatPrice
           };
           
           this.setState((prevState) => {
@@ -67,7 +65,7 @@ class AddressList extends Component {
   
   checkBalance(event) {
     this.fiatPriceCheck();
-    // this.bitcoinAmountCheck();
+    this.bitcoinAmountCheck();
     
     event.preventDefault();
   }

@@ -27,8 +27,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header/>
-        <AddressList fiatPrice={this.handleFiatPrice}/>
+        <Header 
+          fiatPrice={this.state.fiatPrice}
+        />
+        <AddressList 
+          fiatPrice={this.state.fiatPrice}
+          handlefiatPrice={this.handleFiatPrice}
+        />
       </div>
     );
   }
