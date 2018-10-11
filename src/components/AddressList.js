@@ -18,12 +18,22 @@ class AddressList extends Component {
     this.state = {
       addresses: []
     };
+    
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
   }
   
+  fiatPriceCheck() {
+    axios.get("https://api.coinmarketcap.com/v2/ticker/" + "1" + "/")
+      .then(res => {
+        const price = res.data.data.quotes.USD.price;
+        this.props.fiatPrice(price);
+      })
+  }
+  
   bitcoinAmountCheck() {
+    // Fix this to update instead
     this.setState(() => {
       return {
         addresses: []
@@ -37,13 +47,15 @@ class AddressList extends Component {
         let i;
         for (i = 0; i < addresses.length; i++) {
           const addressBalance = data[addresses[i]].final_balance / 100000000;
-          // var address = addressesState.find(function (obj) { return obj.key === addresses[i]; });
           const newAddress = {
             text: addresses[i],
             key: addresses[i],
             cryptoAmount: addressBalance,
+            
+            // fix this too
             fiatAmount: addressBalance * 6000
           };
+          
           this.setState((prevState) => {
             return {
               addresses: prevState.addresses.concat(newAddress)
@@ -54,10 +66,8 @@ class AddressList extends Component {
   }
   
   checkBalance(event) {
-    this.bitcoinAmountCheck();
-    
-    const addressesState = this.state.addresses;
-    console.log(addressesState);
+    this.fiatPriceCheck();
+    // this.bitcoinAmountCheck();
     
     event.preventDefault();
   }

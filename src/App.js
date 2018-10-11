@@ -5,11 +5,30 @@ import AddressList from './components/AddressList';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      fiatPrice: 0,
+      cryptoSym: "btc"
+    };
+    
+    this.handleFiatPrice = this.handleFiatPrice.bind(this);
+  }
+  
+  handleFiatPrice(price) {
+    this.setState(() => {
+      return {
+        fiatPrice: price
+      };
+    });
+  }
+  
   render() {
     return (
       <div className="App">
         <Header/>
-        <AddressList/>
+        <AddressList fiatPrice={this.handleFiatPrice}/>
       </div>
     );
   }
