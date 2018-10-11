@@ -14,6 +14,7 @@ class App extends Component {
     };
     
     this.handleFiatPrice = this.handleFiatPrice.bind(this);
+    this.handleCryptoSym = this.handleCryptoSym.bind(this);
   }
   
   handleFiatPrice(price) {
@@ -24,14 +25,25 @@ class App extends Component {
     });
   }
   
+  handleCryptoSym(cryptoSym) {
+    this.setState(() => {
+      return {
+        cryptoSym: cryptoSym
+      };
+    });
+  }
+  
   render() {
     return (
       <div className="App">
         <Header 
           fiatPrice={this.state.fiatPrice}
+          cryptoSym={this.state.cryptoSym}
+          handleCryptoSym={this.handleCryptoSym}
         />
         <AddressList 
           fiatPrice={this.state.fiatPrice}
+          cryptoSym={this.state.cryptoSym}
           handlefiatPrice={this.handleFiatPrice}
         />
       </div>
