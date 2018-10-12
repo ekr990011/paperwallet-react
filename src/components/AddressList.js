@@ -3,14 +3,6 @@ import Addresses from './Addresses';
 import WAValidator from 'wallet-address-validator';
 import axios from 'axios';
 
-
-// var valid = WAValidator.validate('1KFzzGtDdnq5hrwxXGjwVnKzRbvf8WVxck', 'BTC');
-// if(valid)
-// 	console.log('This is a valid address');
-// else
-//   console.log('Address INVALID');
-  
-
 class AddressList extends Component {
   constructor(props) {
     super(props);
@@ -31,11 +23,43 @@ class AddressList extends Component {
   }
   
   fiatPriceCheck() {
-    axios.get("https://api.coinmarketcap.com/v2/ticker/" + "1" + "/")
+    axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
       .then(res => {
         const price = res.data.data.quotes.USD.price;
         this.props.handlefiatPrice(price);
       })
+  }
+  
+  cryptoAmountCheck() {
+    // Fix this to update instead
+    this.setState(() => {
+      return {
+        addresses: []
+      };
+    });
+    const addresses = this.state.addresses.map(a => a.key);
+    
+    axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
+              + addresses.toString() + "&currency=" + this.props.cryptoSym)
+    .then(res => {
+      const data = res.data.balance;
+      let i;
+      for (i = 0; i < addresses.length; i++) {
+          const addressBalance = data[addresses[i]];
+          const newAddress = {
+            text: addresses[i],
+            key: addresses[i],
+            cryptoAmount: addressBalance,
+            fiatAmount: addressBalance * this.props.fiatPrice
+          };
+          
+          this.setState((prevState) => {
+            return {
+              addresses: prevState.addresses.concat(newAddress)
+            };
+          });
+        }
+    })
   }
   
   bitcoinAmountCheck() {
@@ -70,8 +94,8 @@ class AddressList extends Component {
   }
   
   checkBalance(event) {
+    this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
     this.fiatPriceCheck();
-    this.bitcoinAmountCheck();
     
     event.preventDefault();
   }
@@ -86,7 +110,7 @@ class AddressList extends Component {
         alert("you have entered a duplicte address");
 
       } else if (this._inputElement.value !== ""
-                && WAValidator.validate(this._inputElement.value))  {
+                && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
         var newAddress = {
           text: this._inputElement.value,
           key: this._inputElement.value,
