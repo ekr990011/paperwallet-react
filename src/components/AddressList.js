@@ -16,12 +16,18 @@ class AddressList extends Component {
     super(props);
 
     this.state = {
-      addresses: []
+      addresses: [],
+      cryptoSym: this.props.cryptoSym,
+      cryptoId: this.props.cryptoId
     };
     
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
+  }
+  
+  componentDidUpdate(prevProps) {
+    this.clearAddresses(prevProps);
   }
   
   fiatPriceCheck() {
@@ -100,6 +106,16 @@ class AddressList extends Component {
       this._inputElement.value = "";
       
       event.preventDefault();
+  }
+  
+  clearAddresses(prevProps) {
+    if (prevProps.cryptoSym !== this.props.cryptoSym) {
+      this.setState(() => {
+        return {
+         addresses: [] 
+        };
+      });
+    }
   }
 
   deleteAddress(key) { 

@@ -12,21 +12,22 @@ export default class CryptoDropdown extends React.Component {
     this.state = {
       dropdownOpen: false,
       crypto: [
-        { name: "Bitcoin", sym: "btc", number: 1},
-        { name: "Ethereum", sym: "eth", number: 1027}
+        { name: "Bitcoin", sym: "btc", cryptoId: 1},
+        { name: "Ethereum", sym: "eth", cryptoId: 1027}
       ],
       dropdownValue: "Bitcoin"
     };
   }
   
   cryptoList(crypto) {
-    return <DropdownItem key={crypto.name} onClick={this.toggleCrypto}>
+    return <DropdownItem key={crypto.name} onClick={() => this.toggleCrypto(crypto)}>
         {crypto.name}
     </DropdownItem>
   }
   
-  toggleCrypto(event) {
-    this.setState({dropdownValue: event.currentTarget.textContent});
+  toggleCrypto(crypto) {
+    this.setState({dropdownValue: crypto.name});
+    this.props.handleCryptoSymId(crypto.sym, crypto.cryptoId);
   }
 
   toggle() {
@@ -35,9 +36,8 @@ export default class CryptoDropdown extends React.Component {
     }));
   }
 
-  render() {
+  render(props) {
     var cryptoList = this.state.crypto;
-    console.log(cryptoList);
     var listCryptos = cryptoList.map(this.cryptoList);
     
     return (

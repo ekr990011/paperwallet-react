@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
 import AddressList from './components/AddressList';
-// import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
     
+    
+    // cryptoId is used in CoinMarketCap api
     this.state = {
       fiatPrice: 0,
-      cryptoSym: "btc"
+      cryptoSym: "btc",
+      cryptoId: 1
     };
     
     this.handleFiatPrice = this.handleFiatPrice.bind(this);
-    this.handleCryptoSym = this.handleCryptoSym.bind(this);
+    this.handleCryptoSymId = this.handleCryptoSymId.bind(this);
+  }
+  
+  handleCryptoSymId(cryptoSym, cryptoId) {
+    this.setState({cryptoSym: cryptoSym, cryptoId: cryptoId});
   }
   
   handleFiatPrice(price) {
@@ -25,28 +31,21 @@ class App extends Component {
     });
   }
   
-  handleCryptoSym(cryptoSym) {
-    this.setState(() => {
-      return {
-        cryptoSym: cryptoSym
-      };
-    });
-  }
-  
   render() {
     return (
-      <div className="App">
-        <Header 
-          fiatPrice={this.state.fiatPrice}
-          cryptoSym={this.state.cryptoSym}
-          handleCryptoSym={this.handleCryptoSym}
-        />
-        <AddressList 
-          fiatPrice={this.state.fiatPrice}
-          cryptoSym={this.state.cryptoSym}
-          handlefiatPrice={this.handleFiatPrice}
-        />
-      </div>
+        <div className="App">
+          <Header 
+            fiatPrice={this.state.fiatPrice}
+            cryptoSym={this.state.cryptoSym}
+            handleCryptoSymId={this.handleCryptoSymId}
+          />
+          <AddressList 
+            fiatPrice={this.state.fiatPrice}
+            cryptoSym={this.state.cryptoSym}
+            cryptoId={this.state.cryptoId}
+            handlefiatPrice={this.handleFiatPrice}
+          />
+        </div>
     );
   }
 }
