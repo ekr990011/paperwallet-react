@@ -7,7 +7,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     
-    
     // cryptoId is used in CoinMarketCap api
     this.state = {
       fiatPrice: 0,

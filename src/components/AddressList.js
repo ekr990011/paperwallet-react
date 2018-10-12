@@ -133,13 +133,7 @@ class AddressList extends Component {
   }
   
   clearAddresses(prevProps) {
-    if (prevProps.cryptoSym !== this.props.cryptoSym) {
-      this.setState(() => {
-        return {
-         addresses: [] 
-        };
-      });
-    }
+    prevProps.cryptoSym !== this.props.cryptoSym && this.setState({addresses: []});
   }
 
   deleteAddress(key) { 
