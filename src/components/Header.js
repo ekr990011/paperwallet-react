@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Clipboard from 'react-clipboard-polyfill';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import CryptoDropdown from "./CryptoDropdown";
 
@@ -44,7 +45,7 @@ class Header extends Component {
               {this.state[cryptoSym]}
             </h1>
             <Clipboard text={this.state[cryptoSym]}>
-              <button className="glyphicon glyphicon-copy copy-address">Copy</button>
+              <FontAwesomeIcon icon="copy" />
             </Clipboard>
             <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
           </div>

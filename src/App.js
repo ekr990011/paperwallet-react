@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
-import AddressList from './components/AddressList';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
+
+
 import './App.css';
+import AddressList from './components/AddressList';
+
+library.add(faCopy);
 
 class App extends Component {
   constructor(props) {

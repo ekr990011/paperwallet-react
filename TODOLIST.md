@@ -8,6 +8,7 @@ Todo list 10/12/18
 6) add attribution in github
 ~~7) add all coins~~
 8) add QR code
-9) add donation addresses
+~~9) add donation addresses~~
 10) add CSV functions
+11) glyphicon copy
 
