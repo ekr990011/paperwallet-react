@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import QRCode from 'qrcode.react';
 
 import CryptoDropdown from "./CryptoDropdown";
 
@@ -49,6 +50,11 @@ class Header extends Component {
             </Clipboard>
             <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
           </div>
+          <br />
+          <div className="qrcode">
+            <QRCode value={this.state[cryptoSym]} size={200} />
+          </div>
+          <br />
         </div>
     );
   }
