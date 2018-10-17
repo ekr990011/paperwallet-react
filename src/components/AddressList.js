@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Addresses from './Addresses';
 import WAValidator from 'wallet-address-validator';
 import axios from 'axios';
+import CSVReader from 'react-csv-reader';
 
 class AddressList extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class AddressList extends Component {
       cryptoId: this.props.cryptoId
     };
     
+    this.handleCsvImport = this.handleCsvImport.bind(this);
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
@@ -99,6 +101,63 @@ class AddressList extends Component {
     
     event.preventDefault();
   }
+  
+  handleCsvImport(data) {
+    
+    data.map((row) => {
+      row.map((col) => {
+        const addObject = this.state.addresses;
+        const checkDuplicateArray = (addObject.map(a => a.key));
+        
+        if (WAValidator.validate(col.trim(), this.props.cryptoSym)) {
+          if (checkDuplicateArray.includes(col.trim())) {
+            alert("you have entered a duplicte address");
+          } else {
+            let newAddress = {
+              text: col.trim(),
+              key: col.trim(),
+              cryptoAmount: 0,
+              fiatAmount: 0
+            };
+            
+            this.setState((prevState) => {
+              return {
+                addresses: prevState.addresses.concat(newAddress)
+              };
+            });
+          }
+        }
+      
+        return null;
+      });
+      return null;
+    });
+    
+    // const addObject = this.state.addresses;
+      
+    // const checkDuplicateArray = (addObject.map(a => a.key));
+    // const duplicate = checkDuplicateArray.includes(this._inputElement.value);
+    // if (duplicate) {
+    //   alert("you have entered a duplicte address");
+
+    // } else if (this._inputElement.value !== ""
+    //           && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
+    //   var newAddress = {
+    //     text: this._inputElement.value,
+    //     key: this._inputElement.value,
+    //     cryptoAmount: 0,
+    //     fiatAmount: 0
+    //   };
+
+    //   this.setState((prevState) => {
+    //     return {
+    //       addresses: prevState.addresses.concat(newAddress)
+    //     };
+    //   });
+    // } else {
+    //   alert("Please enter a valid address");
+    // }
+  }
 
 
   addAddress(event) {
@@ -152,6 +211,11 @@ class AddressList extends Component {
   render(){
     return (
       <div className="addressList">
+        <CSVReader
+          cssClass="react-csv-input"
+          label="Select CSV with secret Death Star statistics"
+          onFileLoaded={this.handleCsvImport}
+        />
         <div className="inputForm">
           <form onSubmit={this.addAddress}>
             <input ref={(a) => this._inputElement = a}>

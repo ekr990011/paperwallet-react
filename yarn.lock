@@ -5849,6 +5849,10 @@ pako@~1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.6.tgz#0101211baa70c4bca4a0f63f2206e97b7dfaf258"
 
+papaparse@^4.3.6:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-4.6.1.tgz#7b3c5bdf4f0fd12374e2d37f987e9d74a1834ca8"
+
 parallel-transform@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.1.0.tgz#d410f065b05da23081fcd10f28854c29bda33b06"
@@ -6583,6 +6587,16 @@ react-clipboard-polyfill@^1.0.1:
   dependencies:
     clipboard-polyfill "^2.4.6"
     prop-types "^15.6.1"
+
+react-csv-reader@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-csv-reader/-/react-csv-reader-1.0.0.tgz#db5ca7248b8949e7af8b6dbc5f8619f13c2b8635"
+  dependencies:
+    papaparse "^4.3.6"
+
+react-csv@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-1.0.16.tgz#3b8aacb350bda8c21723e9e85999f37d40454def"
 
 react-dev-utils@^5.0.2:
   version "5.0.2"
