@@ -11,4 +11,7 @@ Todo list 10/12/18
 ~~9) add donation addresses~~
 10) add CSV functions
 11) glyphicon copy
+12) Ad line
+13) api network error checking
+14) total addresses + total cyrpto coins + total fiat
 

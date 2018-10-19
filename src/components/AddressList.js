@@ -3,6 +3,7 @@ import Addresses from './Addresses';
 import WAValidator from 'wallet-address-validator';
 import axios from 'axios';
 import CSVReader from 'react-csv-reader';
+import {CSVLink} from 'react-csv';
 
 class AddressList extends Component {
   constructor(props) {
@@ -11,9 +12,11 @@ class AddressList extends Component {
     this.state = {
       addresses: [],
       cryptoSym: this.props.cryptoSym,
-      cryptoId: this.props.cryptoId
+      cryptoId: this.props.cryptoId,
+      filename: 'PaperWalletChecker'
     };
     
+    this.handleFilename = this.handleFilename.bind(this);
     this.handleCsvImport = this.handleCsvImport.bind(this);
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
@@ -49,7 +52,6 @@ class AddressList extends Component {
       for (i = 0; i < addresses.length; i++) {
           const addressBalance = data[addresses[i]];
           const newAddress = {
-            text: addresses[i],
             key: addresses[i],
             cryptoAmount: addressBalance,
             fiatAmount: addressBalance * this.props.fiatPrice
@@ -80,7 +82,6 @@ class AddressList extends Component {
         for (i = 0; i < addresses.length; i++) {
           const addressBalance = data[addresses[i]].final_balance / 100000000;
           const newAddress = {
-            text: addresses[i],
             key: addresses[i],
             cryptoAmount: addressBalance,
             fiatAmount: addressBalance * this.props.fiatPrice
@@ -103,7 +104,6 @@ class AddressList extends Component {
   }
   
   handleCsvImport(data) {
-    
     data.map((row) => {
       row.map((col) => {
         const addObject = this.state.addresses;
@@ -114,7 +114,6 @@ class AddressList extends Component {
             alert("you have entered a duplicte address");
           } else {
             let newAddress = {
-              text: col.trim(),
               key: col.trim(),
               cryptoAmount: 0,
               fiatAmount: 0
@@ -127,51 +126,24 @@ class AddressList extends Component {
             });
           }
         }
-      
         return null;
       });
       return null;
     });
-    
-    // const addObject = this.state.addresses;
-      
-    // const checkDuplicateArray = (addObject.map(a => a.key));
-    // const duplicate = checkDuplicateArray.includes(this._inputElement.value);
-    // if (duplicate) {
-    //   alert("you have entered a duplicte address");
-
-    // } else if (this._inputElement.value !== ""
-    //           && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
-    //   var newAddress = {
-    //     text: this._inputElement.value,
-    //     key: this._inputElement.value,
-    //     cryptoAmount: 0,
-    //     fiatAmount: 0
-    //   };
-
-    //   this.setState((prevState) => {
-    //     return {
-    //       addresses: prevState.addresses.concat(newAddress)
-    //     };
-    //   });
-    // } else {
-    //   alert("Please enter a valid address");
-    // }
   }
 
 
   addAddress(event) {
       const addObject = this.state.addresses;
-      
       const checkDuplicateArray = (addObject.map(a => a.key));
       const duplicate = checkDuplicateArray.includes(this._inputElement.value);
+      
       if (duplicate) {
         alert("you have entered a duplicte address");
 
       } else if (this._inputElement.value !== ""
                 && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
         var newAddress = {
-          text: this._inputElement.value,
           key: this._inputElement.value,
           cryptoAmount: 0,
           fiatAmount: 0
@@ -187,7 +159,6 @@ class AddressList extends Component {
       }
 
       this._inputElement.value = "";
-      
       event.preventDefault();
   }
   
@@ -207,8 +178,18 @@ class AddressList extends Component {
       addresses: filteredAddresses
     });
   }
+  
+  handleFilename(event) {
+    this.setState({filename: event.target.value})
+  }
 
   render(){
+    const csvDownloadHeaders = [
+      {label: 'Address', key: 'key'},
+      {label: 'btc:', key: 'cryptoAmount'},
+      {label: 'USD:', key: 'fiatAmount'}
+    ];
+    
     return (
       <div className="addressList">
         <CSVReader
@@ -216,6 +197,19 @@ class AddressList extends Component {
           label="Select CSV with secret Death Star statistics"
           onFileLoaded={this.handleCsvImport}
         />
+        <div>
+          <form>
+            <CSVLink data={this.state.addresses} 
+              filename={this.state.filename}
+              className="btn btn-primary"
+              headers={csvDownloadHeaders}
+              target="_blank"
+            >
+                Download me
+            </CSVLink>
+            <input onChange={this.handleFilename}></input>
+          </form>
+        </div>
         <div className="inputForm">
           <form onSubmit={this.addAddress}>
             <input ref={(a) => this._inputElement = a}>

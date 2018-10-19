@@ -28,7 +28,7 @@ class Addresses extends Component {
 
   createAddresses(address) {
     return <li key={address.key} onClick={() => this.handleAddressState(address.key)}>
-      {address.text} {" "}
+      {address.key} {" "}
       {address.cryptoAmount} {" "}
       {address.fiatAmount}
       {" "} <button onClick={() => this.delete(address.key)}>remove</button> 
