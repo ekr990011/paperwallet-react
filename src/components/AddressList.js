@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import Addresses from './Addresses';
 import WAValidator from 'wallet-address-validator';
 import axios from 'axios';
 import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
+
+import Addresses from './Addresses';
+import Totals from './Totals';
 
 class AddressList extends Component {
   constructor(props) {
@@ -115,8 +117,8 @@ class AddressList extends Component {
           } else {
             let newAddress = {
               key: col.trim(),
-              cryptoAmount: 0,
-              fiatAmount: 0
+              cryptoAmount: '',
+              fiatAmount: ''
             };
             
             this.setState((prevState) => {
@@ -145,8 +147,8 @@ class AddressList extends Component {
                 && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
         var newAddress = {
           key: this._inputElement.value,
-          cryptoAmount: 0,
-          fiatAmount: 0
+          cryptoAmount: '',
+          fiatAmount: ''
         };
 
         this.setState((prevState) => {
@@ -210,6 +212,7 @@ class AddressList extends Component {
             <input onChange={this.handleFilename}></input>
           </form>
         </div>
+        <Totals addresses={this.state.addresses} />
         <div className="inputForm">
           <form onSubmit={this.addAddress}>
             <input ref={(a) => this._inputElement = a}>
@@ -219,7 +222,8 @@ class AddressList extends Component {
           <button type="balance" onClick={this.checkBalance}>Check Balance</button>
         </div>
         <Addresses entries={this.state.addresses}
-                    delete={this.deleteAddress}/>
+                   delete={this.deleteAddress}
+        />
       </div>
     );
   }
