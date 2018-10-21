@@ -5,6 +5,7 @@ import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 
 import Addresses from './Addresses';
+import Ad from './Ad';
 import Totals from './Totals';
 
 class AddressList extends Component {
@@ -196,7 +197,7 @@ class AddressList extends Component {
       <div className="addressList">
         <CSVReader
           cssClass="react-csv-input"
-          label="Select CSV with secret Death Star statistics"
+          label="csvPlaceHolder"
           onFileLoaded={this.handleCsvImport}
         />
         <div>
@@ -212,6 +213,7 @@ class AddressList extends Component {
             <input onChange={this.handleFilename}></input>
           </form>
         </div>
+        <Ad />
         <Totals addresses={this.state.addresses} />
         <div className="inputForm">
           <form onSubmit={this.addAddress}>
