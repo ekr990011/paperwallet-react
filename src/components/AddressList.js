@@ -77,7 +77,7 @@ class AddressList extends Component {
       };
     });
     const addresses = this.state.addresses.map(a => a.key);
-    
+  
     axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
       .then(res => {
         const data = res.data;
