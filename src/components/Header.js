@@ -3,6 +3,7 @@ import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import QRCode from 'qrcode.react';
 
+import "../styles/components/header.scss";
 import CryptoDropdown from "./CryptoDropdown";
 
 class Header extends Component {
@@ -40,8 +41,11 @@ class Header extends Component {
     const cryptoSym = this.props.cryptoSym;
 
     return (
-        <div className="todoListMain">
-          <div className="header">
+        <div className="header row h-20">
+          <div className="qrcode col-3 h-100">
+            <QRCode value={this.state[cryptoSym]} size={200} />
+          </div>
+          <div className="col-9 h-100">
             <h1>
               {this.state[cryptoSym]}
             </h1>
@@ -50,11 +54,6 @@ class Header extends Component {
             </Clipboard>
             <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
           </div>
-          <br />
-          <div className="qrcode">
-            <QRCode value={this.state[cryptoSym]} size={200} />
-          </div>
-          <br />
         </div>
     );
   }

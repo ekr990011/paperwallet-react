@@ -4,7 +4,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
 
-import './App.css';
 import AddressList from './components/AddressList';
 
 library.add(faCopy);
@@ -38,7 +37,7 @@ class App extends Component {
   
   render() {
     return (
-        <div className="App">
+        <div className="App h-100">
           <Header 
             fiatPrice={this.state.fiatPrice}
             cryptoSym={this.state.cryptoSym}
