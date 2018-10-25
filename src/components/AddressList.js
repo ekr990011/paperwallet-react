@@ -16,7 +16,8 @@ class AddressList extends Component {
       addresses: [],
       cryptoSym: this.props.cryptoSym,
       cryptoId: this.props.cryptoId,
-      filename: 'PaperWalletChecker'
+      filename: 'PaperWalletChecker',
+      checkbalanceState: this.props.checkbalanceState
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -91,10 +92,12 @@ class AddressList extends Component {
             ]
           });
         }
+        this.props.handleCheckBalanceState("checked");
       })
   }
   
   checkBalance(event) {
+    this.props.handleCheckBalanceState("checking");
     this.fiatPriceCheck();
     this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
     
@@ -161,7 +164,9 @@ class AddressList extends Component {
   }
   
   clearAddresses(prevProps) {
-    prevProps.cryptoSym !== this.props.cryptoSym && this.setState({addresses: []});
+    prevProps.cryptoSym !== this.props.cryptoSym 
+    && this.setState({addresses: []} 
+    && this.props.handleCheckBalanceState("unchecked"));
   }
 
   deleteAddress(key) { 
@@ -169,8 +174,6 @@ class AddressList extends Component {
       console.log(address);
       return (address.key !== key)
     });
-
-    console.log("filteredAddress" + filteredAddresses)
 
     this.setState({
       addresses: filteredAddresses
@@ -209,7 +212,10 @@ class AddressList extends Component {
           </form>
         </div>
         <Ad />
-        <Totals addresses={this.state.addresses} />
+        <Totals 
+          addresses={this.state.addresses}
+          checkBalanceState={this.props.checkBalanceState}
+        />
         <div className="inputForm">
           <form onSubmit={this.addAddress}>
             <input ref={(a) => this._inputElement = a}>
