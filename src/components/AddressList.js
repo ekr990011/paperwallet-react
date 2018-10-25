@@ -39,34 +39,32 @@ class AddressList extends Component {
   }
   
   cryptoAmountCheck() {
-    // Fix this to update instead
-    this.setState(() => {
-      return {
-        addresses: []
-      };
-    });
     const addresses = this.state.addresses.map(a => a.key);
     
     axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
               + addresses.toString() + "&currency=" + this.props.cryptoSym)
     .then(res => {
       const data = res.data.balance;
+      
       let i;
-      for (i = 0; i < addresses.length; i++) {
+        for (i = 0; i < addresses.length; i++) {
+          console.log(addresses[i]);
           const addressBalance = data[addresses[i]];
-          const newAddress = {
-            key: addresses[i],
+          const updateAddress = addresses[i];
+          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+          const addressAttributes = {
             cryptoAmount: addressBalance,
             fiatAmount: addressBalance * this.props.fiatPrice
           };
-          
-          this.setState((prevState) => {
-            return {
-              addresses: prevState.addresses.concat(newAddress)
-            };
+          this.setState({
+            addresses: [
+               ...this.state.addresses.slice(0, index),
+               Object.assign({}, this.state.addresses[index], addressAttributes),
+               ...this.state.addresses.slice(index + 1)
+            ]
           });
         }
-    })
+      })
   }
   
   bitcoinAmountCheck() {
