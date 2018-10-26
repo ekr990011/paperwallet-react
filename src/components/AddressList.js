@@ -5,7 +5,6 @@ import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 
 import Addresses from './Addresses';
-import Ad from './Ad';
 import Totals from './Totals';
 
 class AddressList extends Component {
@@ -192,13 +191,13 @@ class AddressList extends Component {
     ];
     
     return (
-      <div className="addressList">
-        <CSVReader
-          cssClass="react-csv-input"
-          label="csvPlaceHolder"
-          onFileLoaded={this.handleCsvImport}
-        />
-        <div>
+      <div className="addressList row">
+        <div className="col-3">
+          <CSVReader
+            cssClass="react-csv-input"
+            label="csvPlaceHolder"
+            onFileLoaded={this.handleCsvImport}
+          />
           <form>
             <CSVLink data={this.state.addresses} 
               filename={this.state.filename}
@@ -211,7 +210,6 @@ class AddressList extends Component {
             <input onChange={this.handleFilename}></input>
           </form>
         </div>
-        <Ad />
         <Totals 
           addresses={this.state.addresses}
           checkBalanceState={this.props.checkBalanceState}

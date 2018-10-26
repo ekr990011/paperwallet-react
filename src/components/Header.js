@@ -5,6 +5,7 @@ import QRCode from 'qrcode.react';
 
 import "../styles/components/header/header.scss";
 import CryptoDropdown from "./CryptoDropdown";
+import Ad from "./Ad";
 
 class Header extends Component {
   constructor(props) {
@@ -66,6 +67,7 @@ class Header extends Component {
               {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
             </div>
           </div>
+          <Ad />
         </div>
     );
   }
