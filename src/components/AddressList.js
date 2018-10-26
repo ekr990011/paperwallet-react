@@ -5,6 +5,7 @@ import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 import { Button, Table } from 'reactstrap';
 
+import '../styles/components/addresslist/addresslist.scss';
 import Addresses from './Addresses';
 import Totals from './Totals';
 
@@ -163,8 +164,8 @@ class AddressList extends Component {
   
   clearAddresses(prevProps) {
     prevProps.cryptoSym !== this.props.cryptoSym 
-    && this.setState({addresses: []} 
-    && this.props.handleCheckBalanceState("unchecked"));
+    && this.setState({addresses: []})
+    && this.props.handleCheckBalanceState("unchecked");
   }
 
   deleteAddress(key) { 
@@ -189,7 +190,7 @@ class AddressList extends Component {
     ];
     
     return (
-      <div className="addressList row">
+      <div className="address-list row">
         <div className="col-3">
           <Button type="balance" color="success" size="lg"
           onClick={this.checkBalance}
@@ -197,19 +198,19 @@ class AddressList extends Component {
             Check Balance
           </Button>
           <CSVReader
-            cssClass="react-csv-input"
-            label="csvPlaceHolder"
+            cssClass="hello"
             onFileLoaded={this.handleCsvImport}
           />
           <form>
             <CSVLink data={this.state.addresses} 
               filename={this.state.filename}
-              className="btn btn-primary"
+              className="btn btn-lg btn-primary"
               headers={csvDownloadHeaders}
               target="_blank"
             >
-                Download me
+                Export Spreadsheet
             </CSVLink>
+            <h5 className="export-filename">Export Filename : </h5>
             <input onChange={this.handleFilename}></input>
           </form>
         </div>
