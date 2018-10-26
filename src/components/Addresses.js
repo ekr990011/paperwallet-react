@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import QRCode from 'qrcode.react';
 import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Button } from 'reactstrap';
 
 class Addresses extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class Addresses extends Component {
         {address.fiatAmount !== '' ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}
       </td>
       <td>
-        {" "} <button onClick={() => this.delete(address.key)}>remove</button> 
+        <Button size="sm" color="danger" onClick={() => this.delete(address.key)}>remove</Button> 
       </td>
     </tr>
   }
