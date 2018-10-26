@@ -27,14 +27,20 @@ class Addresses extends Component {
   }
 
   createAddresses(address) {
-    return <li key={address.key}>
-      <div onClick={() => this.handleAddressState(address.key)}>
+    return <tr key={address.key}>
+      <td onClick={() => this.handleAddressState(address.key)}>
         {address.key} {" "}
-      </div>
-      {address.cryptoAmount} {" "}
-      {address.fiatAmount}
-      {" "} <button onClick={() => this.delete(address.key)}>remove</button> 
-    </li>
+      </td>
+      <td>
+        {address.cryptoAmount} {" "}
+      </td>
+      <td>
+        {address.fiatAmount}
+      </td>
+      <td>
+        {" "} <button onClick={() => this.delete(address.key)}>remove</button> 
+      </td>
+    </tr>
   }
 
   delete(key) {
@@ -47,7 +53,7 @@ class Addresses extends Component {
     let address = this.state.address;
 
     return (
-      <ul className="theList">
+      <tbody className="theList">
         <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
           <ModalHeader toggle={this.toggleModal}>
             <Clipboard text={address}>
@@ -62,9 +68,8 @@ class Addresses extends Component {
           </ModalBody>
         </Modal>
         
-          {listAddresses}
-        
-      </ul>
+        {listAddresses}
+      </tbody>
     )
   }
 }

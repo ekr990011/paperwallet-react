@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import '../styles/components/totals/totals.scss';
+
 class Totals extends Component {
   handleTotalAddresses()  {
     const totalAddresses = this.props.addresses.length;
@@ -17,7 +19,7 @@ class Totals extends Component {
       return 0;
     });
     return (
-      this.checkBalanceState === 'checked' ? totalCrypto : ''
+      this.props.checkBalanceState === 'checked' ? totalCrypto : ''
     );
   }
   
@@ -32,19 +34,20 @@ class Totals extends Component {
     });
     
     return (
-      this.checkBalanceState === 'checked' ? totalFiat : ''
+      this.props.checkBalanceState === 'checked' ? totalFiat : ''
     );
   }
     
   render(props) {
     return(
-      <div>
-        {this.handleTotalAddresses()}
-        <br />
-        {this.handleTotalCrypto()}
-        <br />
-        {this.handleTotalFiat()}
-      </div>
+      <thead>
+        <tr>
+          <th>Addresses: {this.handleTotalAddresses()}</th>
+          <th>{this.props.cryptoSym.toUpperCase()}: {this.handleTotalCrypto()}</th>
+          <th>USD: {this.handleTotalFiat()}</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
     );
   }
 }

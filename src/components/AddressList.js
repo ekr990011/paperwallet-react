@@ -3,6 +3,7 @@ import WAValidator from 'wallet-address-validator';
 import axios from 'axios';
 import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
+import { Button, Table } from 'reactstrap';
 
 import Addresses from './Addresses';
 import Totals from './Totals';
@@ -48,7 +49,6 @@ class AddressList extends Component {
       
       let i;
         for (i = 0; i < addresses.length; i++) {
-          console.log(addresses[i]);
           const addressBalance = data[addresses[i]];
           const updateAddress = addresses[i];
           const index = this.state.addresses.findIndex(x => x.key === updateAddress);
@@ -75,7 +75,6 @@ class AddressList extends Component {
         const data = res.data;
         let i;
         for (i = 0; i < addresses.length; i++) {
-          console.log(addresses[i]);
           const addressBalance = data[addresses[i]].final_balance / 100000000;
           const updateAddress = addresses[i];
           const index = this.state.addresses.findIndex(x => x.key === updateAddress);
@@ -170,7 +169,6 @@ class AddressList extends Component {
 
   deleteAddress(key) { 
     var filteredAddresses = this.state.addresses.filter(function (address) {
-      console.log(address);
       return (address.key !== key)
     });
 
@@ -193,6 +191,11 @@ class AddressList extends Component {
     return (
       <div className="addressList row">
         <div className="col-3">
+          <Button type="balance" color="success" size="lg"
+          onClick={this.checkBalance}
+          >
+            Check Balance
+          </Button>
           <CSVReader
             cssClass="react-csv-input"
             label="csvPlaceHolder"
@@ -210,21 +213,25 @@ class AddressList extends Component {
             <input onChange={this.handleFilename}></input>
           </form>
         </div>
-        <Totals 
-          addresses={this.state.addresses}
-          checkBalanceState={this.props.checkBalanceState}
-        />
-        <div className="inputForm">
-          <form onSubmit={this.addAddress}>
-            <input ref={(a) => this._inputElement = a}>
-            </input>
-            <button type="submit">Enter a New PaperWallet</button>
-          </form>
-          <button type="balance" onClick={this.checkBalance}>Check Balance</button>
+        <div className="col-9">
+          <div className="inputForm col-12">
+            <form onSubmit={this.addAddress}>
+              <input ref={(a) => this._inputElement = a}>
+              </input>
+              <button type="submit">Enter a New PaperWallet</button>
+            </form>
+          </div>
+          <Table hover={true}>
+            <Totals 
+              addresses={this.state.addresses}
+              checkBalanceState={this.props.checkBalanceState}
+              cryptoSym={this.props.cryptoSym}
+            />
+            <Addresses entries={this.state.addresses}
+                       delete={this.deleteAddress}
+            />
+          </Table>
         </div>
-        <Addresses entries={this.state.addresses}
-                   delete={this.deleteAddress}
-        />
       </div>
     );
   }

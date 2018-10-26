@@ -4,7 +4,7 @@ import '../styles/components/ad/ad.scss';
 
 const Ad =() => {
   return (
-    <div className="mx-auto ad">
+    <div className="col-10 text-center ad">
       Your Ad here Supports this Site and the Crypto Community!
     </div>
     )
