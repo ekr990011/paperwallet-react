@@ -4,7 +4,7 @@ class Totals extends Component {
   handleTotalAddresses()  {
     const totalAddresses = this.props.addresses.length;
     
-    return totalAddresses;
+    return (totalAddresses === 0 ? '' : totalAddresses);
   }
   
   handleTotalCrypto() {
@@ -16,8 +16,9 @@ class Totals extends Component {
       }
       return 0;
     });
-    
-    return totalCrypto;
+    return (
+      this.checkBalanceState === 'checked' ? totalCrypto : ''
+    );
   }
   
   handleTotalFiat() {
@@ -30,7 +31,9 @@ class Totals extends Component {
       return 0;
     });
     
-    return totalFiat;
+    return (
+      this.checkBalanceState === 'checked' ? totalFiat : ''
+    );
   }
     
   render(props) {

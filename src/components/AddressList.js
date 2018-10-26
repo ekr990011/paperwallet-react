@@ -16,7 +16,8 @@ class AddressList extends Component {
       addresses: [],
       cryptoSym: this.props.cryptoSym,
       cryptoId: this.props.cryptoId,
-      filename: 'PaperWalletChecker'
+      filename: 'PaperWalletChecker',
+      checkbalanceState: this.props.checkbalanceState
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -39,44 +40,35 @@ class AddressList extends Component {
   }
   
   cryptoAmountCheck() {
-    // Fix this to update instead
-    this.setState(() => {
-      return {
-        addresses: []
-      };
-    });
     const addresses = this.state.addresses.map(a => a.key);
     
     axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
               + addresses.toString() + "&currency=" + this.props.cryptoSym)
     .then(res => {
       const data = res.data.balance;
+      
       let i;
-      for (i = 0; i < addresses.length; i++) {
+        for (i = 0; i < addresses.length; i++) {
+          console.log(addresses[i]);
           const addressBalance = data[addresses[i]];
-          const newAddress = {
-            key: addresses[i],
+          const updateAddress = addresses[i];
+          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+          const addressAttributes = {
             cryptoAmount: addressBalance,
             fiatAmount: addressBalance * this.props.fiatPrice
           };
-          
-          this.setState((prevState) => {
-            return {
-              addresses: prevState.addresses.concat(newAddress)
-            };
+          this.setState({
+            addresses: [
+               ...this.state.addresses.slice(0, index),
+               Object.assign({}, this.state.addresses[index], addressAttributes),
+               ...this.state.addresses.slice(index + 1)
+            ]
           });
         }
-    })
+      })
   }
   
   bitcoinAmountCheck() {
-    console.log(this.state.addresses);
-    // Fix this to update instead
-    this.setState(() => {
-      return {
-        addresses: []
-      };
-    });
     const addresses = this.state.addresses.map(a => a.key);
   
     axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
@@ -84,25 +76,30 @@ class AddressList extends Component {
         const data = res.data;
         let i;
         for (i = 0; i < addresses.length; i++) {
+          console.log(addresses[i]);
           const addressBalance = data[addresses[i]].final_balance / 100000000;
-          const newAddress = {
-            key: addresses[i],
+          const updateAddress = addresses[i];
+          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+          const addressAttributes = {
             cryptoAmount: addressBalance,
             fiatAmount: addressBalance * this.props.fiatPrice
           };
-          
-          this.setState((prevState) => {
-            return {
-              addresses: prevState.addresses.concat(newAddress)
-            };
+          this.setState({
+            addresses: [
+               ...this.state.addresses.slice(0, index),
+               Object.assign({}, this.state.addresses[index], addressAttributes),
+               ...this.state.addresses.slice(index + 1)
+            ]
           });
         }
+        this.props.handleCheckBalanceState("checked");
       })
   }
   
   checkBalance(event) {
-    this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
+    this.props.handleCheckBalanceState("checking");
     this.fiatPriceCheck();
+    this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
     
     event.preventDefault();
   }
@@ -167,7 +164,9 @@ class AddressList extends Component {
   }
   
   clearAddresses(prevProps) {
-    prevProps.cryptoSym !== this.props.cryptoSym && this.setState({addresses: []});
+    prevProps.cryptoSym !== this.props.cryptoSym 
+    && this.setState({addresses: []} 
+    && this.props.handleCheckBalanceState("unchecked"));
   }
 
   deleteAddress(key) { 
@@ -175,8 +174,6 @@ class AddressList extends Component {
       console.log(address);
       return (address.key !== key)
     });
-
-    console.log("filteredAddress" + filteredAddresses)
 
     this.setState({
       addresses: filteredAddresses
@@ -215,7 +212,10 @@ class AddressList extends Component {
           </form>
         </div>
         <Ad />
-        <Totals addresses={this.state.addresses} />
+        <Totals 
+          addresses={this.state.addresses}
+          checkBalanceState={this.props.checkBalanceState}
+        />
         <div className="inputForm">
           <form onSubmit={this.addAddress}>
             <input ref={(a) => this._inputElement = a}>
