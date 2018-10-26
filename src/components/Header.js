@@ -39,6 +39,11 @@ class Header extends Component {
   
   render(){
     const cryptoSym = this.props.cryptoSym;
+    const cryptoFiatRate = (
+      <h3 className="text-center" id="fiat-current-price">
+        Current {this.props.cryptoSym.toUpperCase()} / USD : ${this.props.fiatPrice.toFixed(2)}
+      </h3>
+    );
 
     return (
         <div className="header row">
@@ -58,9 +63,7 @@ class Header extends Component {
                 {" "}
                 <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
               </h3>
-              <h3 className="text-center" id="fiat-current-price">
-                Current {this.props.cryptoSym.toUpperCase()} / USD : {this.props.fiatPrice}
-              </h3>
+              {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
             </div>
           </div>
         </div>
