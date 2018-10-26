@@ -3,7 +3,7 @@ import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import QRCode from 'qrcode.react';
 
-import "../styles/components/header.scss";
+import "../styles/components/header/header.scss";
 import CryptoDropdown from "./CryptoDropdown";
 
 class Header extends Component {
@@ -41,18 +41,27 @@ class Header extends Component {
     const cryptoSym = this.props.cryptoSym;
 
     return (
-        <div className="header row h-20">
-          <div className="qrcode col-3 h-100">
-            <QRCode value={this.state[cryptoSym]} size={200} />
+        <div className="header row">
+          <div className="qrcode col-2">
+            <QRCode value={this.state[cryptoSym]} renderAs={"svg"} className={"qrcode-canvas"} />
           </div>
-          <div className="col-9 h-100">
-            <h1>
-              {this.state[cryptoSym]}
+          <div className="col-10">
+            <h1 className="donation-address">
+              <Clipboard text={this.state[cryptoSym]}>
+                {this.state[cryptoSym]}
+                {" "}
+                <FontAwesomeIcon icon="copy" className="copy-icon" />
+              </Clipboard>
             </h1>
-            <Clipboard text={this.state[cryptoSym]}>
-              <FontAwesomeIcon icon="copy" />
-            </Clipboard>
-            <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
+            <div className="col-10 text-center">
+              <h3 className="slogan">Your Crypto Paper Wallet Checker ! 
+                {" "}
+                <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
+              </h3>
+              <h3 className="text-center" id="fiat-current-price">
+                Current {this.props.cryptoSym.toUpperCase()} / USD : {this.props.fiatPrice}
+              </h3>
+            </div>
           </div>
         </div>
     );

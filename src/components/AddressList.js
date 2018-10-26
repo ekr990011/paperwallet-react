@@ -70,6 +70,7 @@ class AddressList extends Component {
   }
   
   bitcoinAmountCheck() {
+    console.log(this.state.addresses);
     // Fix this to update instead
     this.setState(() => {
       return {

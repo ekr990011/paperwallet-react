@@ -1,5 +1,7 @@
 import React from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+import '../styles/components/cryptodropdown/cryptodropdown.scss';
 
 export default class CryptoDropdown extends React.Component {
   constructor(props) {
@@ -62,7 +64,7 @@ export default class CryptoDropdown extends React.Component {
     var listCryptos = cryptoList.map(this.cryptoList);
     
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+      <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <DropdownToggle caret>
           {this.state.dropdownValue}
         </DropdownToggle>
@@ -83,10 +85,11 @@ export default class CryptoDropdown extends React.Component {
               },
             },
           }}
+          className="crypto-list-dropdown"
         >
           {listCryptos}
         </DropdownMenu>
-      </Dropdown>
+      </ButtonDropdown>
     );
   }
 }
