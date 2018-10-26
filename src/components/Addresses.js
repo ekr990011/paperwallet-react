@@ -29,13 +29,13 @@ class Addresses extends Component {
   createAddresses(address) {
     return <tr key={address.key}>
       <td onClick={() => this.handleAddressState(address.key)}>
-        {address.key} {" "}
+        {address.key}
       </td>
       <td>
-        {address.cryptoAmount} {" "}
+        {address.cryptoAmount}
       </td>
       <td>
-        {address.fiatAmount}
+        {address.fiatAmount !== '' ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}
       </td>
       <td>
         {" "} <button onClick={() => this.delete(address.key)}>remove</button> 

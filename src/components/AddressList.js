@@ -32,6 +32,14 @@ class AddressList extends Component {
     this.clearAddresses(prevProps);
   }
   
+  clearAddresses(prevProps) {
+    if (prevProps.cryptoSym !== this.props.cryptoSym) {
+      this.setState({addresses: []});
+      this.props.handleCheckBalanceState("unchecked");
+      this.props.handlefiatPrice(0);
+    }
+  }
+  
   fiatPriceCheck() {
     axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
       .then(res => {
@@ -162,12 +170,6 @@ class AddressList extends Component {
       event.preventDefault();
   }
   
-  clearAddresses(prevProps) {
-    prevProps.cryptoSym !== this.props.cryptoSym 
-    && this.setState({addresses: []})
-    && this.props.handleCheckBalanceState("unchecked");
-  }
-
   deleteAddress(key) { 
     var filteredAddresses = this.state.addresses.filter(function (address) {
       return (address.key !== key)

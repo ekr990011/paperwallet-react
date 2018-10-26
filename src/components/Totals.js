@@ -34,7 +34,7 @@ class Totals extends Component {
     });
     
     return (
-      this.props.checkBalanceState === 'checked' ? totalFiat.toFixed(2) : ''
+      this.props.checkBalanceState === 'checked' ? '$' + totalFiat.toFixed(2) : ''
     );
   }
     
@@ -44,7 +44,7 @@ class Totals extends Component {
         <tr>
           <th>Addresses: {this.handleTotalAddresses()}</th>
           <th>{this.props.cryptoSym.toUpperCase()}: {this.handleTotalCrypto()}</th>
-          <th>USD: ${this.handleTotalFiat()}</th>
+          <th>USD: {this.handleTotalFiat()}</th>
           <th>Remove</th>
         </tr>
       </thead>

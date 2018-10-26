@@ -51,6 +51,7 @@ export default class CryptoDropdown extends React.Component {
   toggleCrypto(crypto) {
     this.setState({dropdownValue: crypto.name});
     this.props.handleCryptoSymId(crypto.sym, crypto.cryptoId);
+    this.props.handleCheckBalanceState("unchecked");
   }
 
   toggle() {

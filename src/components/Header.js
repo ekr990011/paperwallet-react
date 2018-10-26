@@ -34,8 +34,6 @@ class Header extends Component {
       dcr: "Decred Paper Wallet Checker!",
       dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi"
     }
-    
-    
   }
   
   render(){
@@ -62,7 +60,10 @@ class Header extends Component {
             <div className="col-10 text-center">
               <h3 className="slogan">Your Crypto Paper Wallet Checker ! 
                 {" "}
-                <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
+                <CryptoDropdown 
+                  handleCryptoSymId={this.props.handleCryptoSymId} 
+                  handleCheckBalanceState={this.props.handleCheckBalanceState}
+                />
               </h3>
               {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
             </div>
