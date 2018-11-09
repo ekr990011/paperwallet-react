@@ -35,6 +35,14 @@
   color: white;
 }
 
+.modal-title {
+  color: black;
+}
+
+.csv-import {
+  color: black;
+}
+
 .address-buttons {
   font-size: 1.09vw;
 }
@@ -45,5 +53,9 @@
 
 .address-buttons > form > .btn-primary {
   margin-top: 5%;
-  margin-bottom: 2%;
+  margin-bottom: 4%;
+}
+
+.address-buttons > .btn-warning {
+  color: white;
 }

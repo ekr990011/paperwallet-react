@@ -4,7 +4,8 @@ import axios from 'axios';
 import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Form, FormGroup, Popover, PopoverHeader, PopoverBody, Table, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Popover, PopoverHeader, PopoverBody,
+         Modal, ModalHeader, ModalBody, Table, Input } from 'reactstrap';
 
 import '../styles/components/addresslist/addresslist.scss';
 import Addresses from './Addresses';
@@ -20,7 +21,8 @@ class AddressList extends Component {
       cryptoId: this.props.cryptoId,
       filename: 'PaperWalletChecker.csv',
       checkbalanceState: this.props.checkbalanceState,
-      popoverOpen: false
+      popoverOpen: false,
+      modal: false
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -29,6 +31,7 @@ class AddressList extends Component {
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
   
   componentDidUpdate(prevProps) {
@@ -41,6 +44,10 @@ class AddressList extends Component {
       this.props.handleCheckBalanceState("unchecked");
       this.props.handlefiatPrice(0);
     }
+  }
+  
+  toggleModal() {
+    this.setState({modal: !this.state.modal});
   }
   
   toggle() {
@@ -138,7 +145,8 @@ class AddressList extends Component {
             
             this.setState((prevState) => {
               return {
-                addresses: prevState.addresses.concat(newAddress)
+                addresses: prevState.addresses.concat(newAddress),
+                modal: !this.state.modal
               };
             });
           }
@@ -203,15 +211,31 @@ class AddressList extends Component {
     return (
       <div className="address-list row">
         <div className="col-3 address-buttons">
+          <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
+            <ModalHeader toggle={this.toggleModal}>
+              <div>
+                <h3>
+                  Import Your Spreadsheet:
+                </h3>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <CSVReader
+                cssClass="csv-import"
+                onFileLoaded={this.handleCsvImport}
+              />
+            </ModalBody>
+          </Modal>
           <Button type="balance" color="success" size="lg"
-          onClick={this.checkBalance}
+            onClick={this.checkBalance}
           >
             Check Balance
           </Button>
-          <CSVReader
-            cssClass="hello"
-            onFileLoaded={this.handleCsvImport}
-          />
+          <Button type="import" color="warning" size="lg"
+            onClick={this.toggleModal}
+          >
+            Load Spreadsheet
+          </Button>
           <form>
             <CSVLink data={this.state.addresses} 
               filename={this.state.filename}
@@ -222,7 +246,7 @@ class AddressList extends Component {
                 Export Spreadsheet
             </CSVLink>
             <h5 className="export-filename">Export Filename : </h5>
-            <input onChange={this.handleFilename}></input>
+            <Input className="col-9" onChange={this.handleFilename}></Input>
           </form>
         </div>
         <div className="col-9">
@@ -243,6 +267,7 @@ class AddressList extends Component {
                       <li>Validates the Public Address</li>
                       <li>Enter One Address at a Time</li>
                       <li>You can Import Public Keys from a Spreadsheet</li>
+                      <li>Click on any Address to View a Qrcode</li>
                     </ul>
                   </PopoverBody>
                 </Popover>
