@@ -3,7 +3,8 @@ import WAValidator from 'wallet-address-validator';
 import axios from 'axios';
 import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
-import { Button, Table } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Form, FormGroup, Popover, PopoverHeader, PopoverBody, Table, Input } from 'reactstrap';
 
 import '../styles/components/addresslist/addresslist.scss';
 import Addresses from './Addresses';
@@ -17,8 +18,9 @@ class AddressList extends Component {
       addresses: [],
       cryptoSym: this.props.cryptoSym,
       cryptoId: this.props.cryptoId,
-      filename: 'PaperWalletChecker',
-      checkbalanceState: this.props.checkbalanceState
+      filename: 'PaperWalletChecker.csv',
+      checkbalanceState: this.props.checkbalanceState,
+      popoverOpen: false
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -26,6 +28,7 @@ class AddressList extends Component {
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
   
   componentDidUpdate(prevProps) {
@@ -40,12 +43,18 @@ class AddressList extends Component {
     }
   }
   
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
+  }
+  
   fiatPriceCheck() {
     axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
       .then(res => {
         const price = res.data.data.quotes.USD.price;
         this.props.handlefiatPrice(price);
-      })
+      });
   }
   
   cryptoAmountCheck() {
@@ -73,7 +82,7 @@ class AddressList extends Component {
             ]
           });
         }
-      })
+      });
   }
   
   bitcoinAmountCheck() {
@@ -100,7 +109,7 @@ class AddressList extends Component {
           });
         }
         this.props.handleCheckBalanceState("checked");
-      })
+      });
   }
   
   checkBalance(event) {
@@ -172,7 +181,7 @@ class AddressList extends Component {
   
   deleteAddress(key) { 
     var filteredAddresses = this.state.addresses.filter(function (address) {
-      return (address.key !== key)
+      return (address.key !== key);
     });
 
     this.setState({
@@ -181,7 +190,7 @@ class AddressList extends Component {
   }
   
   handleFilename(event) {
-    this.setState({filename: event.target.value})
+    this.setState({filename: event.target.value});
   }
 
   render(){
@@ -193,7 +202,7 @@ class AddressList extends Component {
     
     return (
       <div className="address-list row">
-        <div className="col-3">
+        <div className="col-3 address-buttons">
           <Button type="balance" color="success" size="lg"
           onClick={this.checkBalance}
           >
@@ -217,12 +226,28 @@ class AddressList extends Component {
           </form>
         </div>
         <div className="col-9">
-          <div className="inputForm col-12">
-            <form onSubmit={this.addAddress}>
-              <input ref={(a) => this._inputElement = a}>
-              </input>
-              <button type="submit">Enter a New PaperWallet</button>
-            </form>
+          <div className="input-form col-12">
+            <Form inline onSubmit={this.addAddress}>
+              <FormGroup className="col-12 row no-gutters">
+                <Input className="col-8" id="input-address-text" innerRef={(a) => this._inputElement = a} />
+                <div className="col-4 input-address-buttons">
+                  <Button className="input-address-submit" color="info" type="submit">Enter a New Paper Wallet</Button>
+                  <Button id="Popover1" onClick={this.toggle}>
+                    <FontAwesomeIcon icon="question-circle" inverse className="" />
+                  </Button>
+                </div>
+                <Popover className="popover" placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+                  <PopoverHeader className="text-center">Public Addresses Only</PopoverHeader>
+                  <PopoverBody>
+                    <ul>
+                      <li>Validates the Public Address</li>
+                      <li>Enter One Address at a Time</li>
+                      <li>You can Import Public Keys from a Spreadsheet</li>
+                    </ul>
+                  </PopoverBody>
+                </Popover>
+              </FormGroup>
+            </Form>
           </div>
           <Table hover={true}>
             <Totals 
