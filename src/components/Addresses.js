@@ -14,7 +14,7 @@ class Addresses extends Component {
     };
     
     this.toggleModal = this.toggleModal.bind(this);
-    this.createAddresses = this.createAddresses.bind(this)
+    this.createAddresses = this.createAddresses.bind(this);
   }
   
   handleAddressState(address) {
@@ -27,20 +27,22 @@ class Addresses extends Component {
   }
 
   createAddresses(address) {
-    return <tr key={address.key}>
-      <td onClick={() => this.handleAddressState(address.key)}>
-        {address.key}
-      </td>
-      <td>
-        {address.cryptoAmount}
-      </td>
-      <td>
-        {address.fiatAmount !== '' ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}
-      </td>
-      <td>
-        <Button size="sm" color="danger" onClick={() => this.delete(address.key)}>remove</Button> 
-      </td>
-    </tr>
+    return (
+      <tr key={address.key}>
+        <td onClick={() => this.handleAddressState(address.key)}>
+          {address.key}
+        </td>
+        <td>
+          {address.cryptoAmount}
+        </td>
+        <td>
+          {address.fiatAmount !== '' ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}
+        </td>
+        <td>
+          <Button size="sm" color="danger" onClick={() => this.delete(address.key)}>remove</Button> 
+        </td>
+      </tr>
+    );
   }
 
   delete(key) {
@@ -70,7 +72,7 @@ class Addresses extends Component {
         
         {listAddresses}
       </tbody>
-    )
+    );
   }
 }
 

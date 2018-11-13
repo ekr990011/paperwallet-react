@@ -133,6 +133,9 @@ class AddressList extends Component {
         const addObject = this.state.addresses;
         const checkDuplicateArray = (addObject.map(a => a.key));
         
+        console.log(col.trim());
+        console.log(WAValidator.validate(col.trim(), this.props.cryptoSym));
+        
         if (WAValidator.validate(col.trim(), this.props.cryptoSym)) {
           if (checkDuplicateArray.includes(col.trim())) {
             alert("you have entered a duplicte address");
@@ -150,6 +153,9 @@ class AddressList extends Component {
               };
             });
           }
+        } else {
+          console.log("Please enter a valid address or check that you have selected : "
+                  + this.props.cryptoSym.toUpperCase());
         }
         return null;
       });
@@ -159,32 +165,31 @@ class AddressList extends Component {
 
 
   addAddress(event) {
-      const addObject = this.state.addresses;
-      const checkDuplicateArray = (addObject.map(a => a.key));
-      const duplicate = checkDuplicateArray.includes(this._inputElement.value);
-      
-      if (duplicate) {
-        alert("you have entered a duplicte address");
+    const addObject = this.state.addresses;
+    const checkDuplicateArray = (addObject.map(a => a.key));
+    const duplicate = checkDuplicateArray.includes(this._inputElement.value);
+    
+    if (duplicate) {
+      alert("you have entered a duplicte address");
+    } else if (this._inputElement.value !== ""
+              && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
+      var newAddress = {
+        key: this._inputElement.value,
+        cryptoAmount: '',
+        fiatAmount: ''
+      };
 
-      } else if (this._inputElement.value !== ""
-                && WAValidator.validate(this._inputElement.value, this.props.cryptoSym))  {
-        var newAddress = {
-          key: this._inputElement.value,
-          cryptoAmount: '',
-          fiatAmount: ''
+      this.setState((prevState) => {
+        return {
+          addresses: prevState.addresses.concat(newAddress)
         };
+      });
+    } else {
+      alert("Please enter a valid address");
+    }
 
-        this.setState((prevState) => {
-          return {
-            addresses: prevState.addresses.concat(newAddress)
-          };
-        });
-      } else {
-        alert("Please enter a valid address");
-      }
-
-      this._inputElement.value = "";
-      event.preventDefault();
+    this._inputElement.value = "";
+    event.preventDefault();
   }
   
   deleteAddress(key) { 
