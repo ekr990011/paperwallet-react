@@ -61,12 +61,14 @@ class Addresses extends Component {
             <Clipboard text={address}>
               <div>
                 {address}
+              </div>
+              <div className="text-center">
                 <FontAwesomeIcon icon="copy" />
               </div>
             </Clipboard>
           </ModalHeader>
-          <ModalBody>
-            <QRCode value={address} />
+          <ModalBody className="text-center">
+            <QRCode value={address} level="H" className="qrcode-canvas" />
           </ModalBody>
         </Modal>
         

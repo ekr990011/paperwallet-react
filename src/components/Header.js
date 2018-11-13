@@ -47,7 +47,7 @@ class Header extends Component {
     return (
         <div className="header row">
           <div className="qrcode col-2">
-            <QRCode value={this.state[cryptoSym]} renderAs={"svg"} className={"qrcode-canvas"} />
+            <QRCode value={this.state[cryptoSym]} renderAs={"svg"} className={"qrcode-canvas"} level="H" />
           </div>
           <div className="col-10">
             <h1 className="donation-address">
