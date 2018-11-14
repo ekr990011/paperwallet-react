@@ -1,0 +1,44 @@
+.header {
+  font-size: 3vw;
+  margin-top: 0.5rem;
+  // overflow: hidden;
+}
+
+.qrcode {
+  text-align: center;
+}
+
+.qrcode-canvas {
+  width: 100% !important;
+  height: auto !important;
+  border: 0.3rem solid white;
+  border-radius: 0.3rem;
+}
+
+.donation-address {
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.copy-icon {
+  font-size: 0.7em;
+  margin-bottom: 0.25rem;
+}
+
+.copy-icon:hover {
+  background-color: #9d9d9d;
+  border: 0.01rem inset #b9acac;
+  border-radius: 0.3rem;
+}
+
+.slogan {
+  font-size: 0.5em;
+  font-weight: bold;
+}
+
+#fiat-current-price {
+  font-size: 0.475em;
+  font-weight: bold;
+  margin: 0;
+}

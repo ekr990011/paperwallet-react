@@ -3,7 +3,9 @@ import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import QRCode from 'qrcode.react';
 
+import "../styles/components/header/header.scss";
 import CryptoDropdown from "./CryptoDropdown";
+import Ad from "./Ad";
 
 class Header extends Component {
   constructor(props) {
@@ -32,29 +34,41 @@ class Header extends Component {
       dcr: "Decred Paper Wallet Checker!",
       dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi"
     }
-    
-    
   }
   
   render(){
     const cryptoSym = this.props.cryptoSym;
+    const cryptoFiatRate = (
+      <h3 className="text-center" id="fiat-current-price">
+        Current {this.props.cryptoSym.toUpperCase()} / USD : ${this.props.fiatPrice.toFixed(2)}
+      </h3>
+    );
 
     return (
-        <div className="todoListMain">
-          <div className="header">
-            <h1>
-              {this.state[cryptoSym]}
+        <div className="header row">
+          <div className="qrcode col-2">
+            <QRCode value={this.state[cryptoSym]} renderAs={"svg"} className={"qrcode-canvas"} level="H" />
+          </div>
+          <div className="col-10">
+            <h1 className="donation-address">
+              <Clipboard text={this.state[cryptoSym]}>
+                {this.state[cryptoSym]}
+                {" "}
+                <FontAwesomeIcon icon="copy" className="copy-icon" />
+              </Clipboard>
             </h1>
-            <Clipboard text={this.state[cryptoSym]}>
-              <FontAwesomeIcon icon="copy" />
-            </Clipboard>
-            <CryptoDropdown handleCryptoSymId={this.props.handleCryptoSymId}/>
+            <div className="col-10 text-center">
+              <h3 className="slogan">Your Crypto Paper Wallet Checker ! 
+                {" "}
+                <CryptoDropdown 
+                  handleCryptoSymId={this.props.handleCryptoSymId} 
+                  handleCheckBalanceState={this.props.handleCheckBalanceState}
+                />
+              </h3>
+              {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
+            </div>
+            <Ad />
           </div>
-          <br />
-          <div className="qrcode">
-            <QRCode value={this.state[cryptoSym]} size={200} />
-          </div>
-          <br />
         </div>
     );
   }
