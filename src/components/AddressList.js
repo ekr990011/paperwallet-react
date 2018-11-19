@@ -7,6 +7,7 @@ import {CSVLink} from 'react-csv';
 import Addresses from './Addresses';
 import Ad from './Ad';
 import Totals from './Totals';
+import {litecoinApi} from '../apis/litecoin';
 
 class AddressList extends Component {
   constructor(props) {
@@ -97,9 +98,15 @@ class AddressList extends Component {
   }
   
   checkBalance(event) {
+    const addresses = this.state.addresses.map(a => a.key);
+    
     this.props.handleCheckBalanceState("checking");
     this.fiatPriceCheck();
-    this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
+    console.log('Iamhere');
+    litecoinApi(addresses);
+    console.log('iamafterhere');
+    // this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : litecoinApi(addresses);
+    // this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
     
     event.preventDefault();
   }
