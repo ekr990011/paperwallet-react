@@ -77,7 +77,6 @@ class AddressList extends Component {
         const data = res.data;
         let i;
         for (i = 0; i < addresses.length; i++) {
-          console.log(addresses[i]);
           const addressBalance = data[addresses[i]].final_balance / 100000000;
           const updateAddress = addresses[i];
           const index = this.state.addresses.findIndex(x => x.key === updateAddress);
@@ -102,12 +101,40 @@ class AddressList extends Component {
     
     this.props.handleCheckBalanceState("checking");
     this.fiatPriceCheck();
-    console.log('Iamhere');
-    litecoinApi(addresses);
-    console.log('iamafterhere');
+    
+    
+    let apis = new Promise(function(resolve, reject) {
+      litecoinApi(addresses, resolve, reject);
+    });
+    
+    apis.then((result) => {
+      console.log(result);
+    });
+    
     // this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : litecoinApi(addresses);
     // this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
     
+    
+    
+    // testing
+    // let i;
+    // for (i = 0; i < addresses.length; i++) {
+    //   const addressBalance = litecoinAddresses[addresses[i]];
+    //   console.log(addressBalance);
+    //   const updateAddress = addresses[i];
+    //   const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+    //   const addressAttributes = {
+    //     cryptoAmount: addressBalance,
+    //     fiatAmount: addressBalance * this.props.fiatPrice
+    //   };
+    //   this.setState({
+    //     addresses: [
+    //       ...this.state.addresses.slice(0, index),
+    //       Object.assign({}, this.state.addresses[index], addressAttributes),
+    //       ...this.state.addresses.slice(index + 1)
+    //     ]
+    //   });
+    // }
     event.preventDefault();
   }
   
