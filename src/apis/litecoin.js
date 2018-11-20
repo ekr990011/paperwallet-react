@@ -1,18 +1,23 @@
 import axios from 'axios';
 
 export const litecoinApi = (addresses, resolve, reject) => {
-  let done = false;
   let addressesBalance = {};
+  let addressRequests = [];
   
   addresses.forEach(address => {
-    axios.get("https://chain.so/api/v2/get_address_balance/LTC/" + address + "/6")
-      .then(res => {
-        const data = res.data.data.confirmed_balance;
-        addressesBalance[address.toString()] = data.toString();
-      }).then(() => {
-          resolve(addressesBalance);
-      }).catch(error => {
-          reject(error);
-      });
+    addressRequests.push("https://chain.so/api/v2/get_address_balance/LTC/" + address + "/6");
+  });
+  
+  axios.all(addressRequests.map(l => axios.get(l)))
+  .then(axios.spread((...res) => {
+    let i;
+    for(i = 0; i < res.length; i++) {
+      const data = res[i].data.data;
+      addressesBalance[data.address.toString()] = data.confirmed_balance.toString();
+    }
+    
+    resolve(addressesBalance);
+  })).catch((error) => {
+    reject(error);
   });
 };

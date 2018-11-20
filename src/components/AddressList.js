@@ -8,6 +8,7 @@ import Addresses from './Addresses';
 import Ad from './Ad';
 import Totals from './Totals';
 import {litecoinApi} from '../apis/litecoin';
+import {fiatPriceCheck} from '../apis/fiat';
 
 class AddressList extends Component {
   constructor(props) {
@@ -32,13 +33,13 @@ class AddressList extends Component {
     this.clearAddresses(prevProps);
   }
   
-  fiatPriceCheck() {
-    axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
-      .then(res => {
-        const price = res.data.data.quotes.USD.price;
-        this.props.handlefiatPrice(price);
-      })
-  }
+  // fiatPriceCheck() {
+  //   axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
+  //     .then(res => {
+  //       const price = res.data.data.quotes.USD.price;
+  //       this.props.handlefiatPrice(price);
+  //     })
+  // }
   
   cryptoAmountCheck() {
     const addresses = this.state.addresses.map(a => a.key);
@@ -66,7 +67,7 @@ class AddressList extends Component {
             ]
           });
         }
-      })
+      });
   }
   
   bitcoinAmountCheck() {
@@ -93,48 +94,49 @@ class AddressList extends Component {
           });
         }
         this.props.handleCheckBalanceState("checked");
-      })
+      });
   }
   
   checkBalance(event) {
+    const cryptoId = this.props.cryptoId;
+    const handlefiatPrice = this.props.handlefiatPrice;
     const addresses = this.state.addresses.map(a => a.key);
     
     this.props.handleCheckBalanceState("checking");
-    this.fiatPriceCheck();
     
+    let fiatApis = new Promise(function(resolve, reject) {
+      fiatPriceCheck(cryptoId, handlefiatPrice, resolve, reject);
+    });
     
-    let apis = new Promise(function(resolve, reject) {
+    let cryptoApis = new Promise(function(resolve, reject) {
       litecoinApi(addresses, resolve, reject);
     });
     
-    apis.then((result) => {
-      console.log(result);
-    });
+    const balancePromises = [fiatApis, cryptoApis];
     
-    // this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : litecoinApi(addresses);
-    // this.props.cryptoSym === 'btc' ? this.bitcoinAmountCheck() : this.cryptoAmountCheck();
+    Promise.all(balancePromises)
+      .then((result) => {
+        console.log(result[1]);
+        let i;
+        for (i = 0; i < addresses.length; i++) {
+          const addressBalance = result[1][addresses[i]];
+          console.log(addressBalance);
+          const updateAddress = addresses[i];
+          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+          const addressAttributes = {
+            cryptoAmount: addressBalance,
+            fiatAmount: addressBalance * this.props.fiatPrice
+          };
+          this.setState({
+            addresses: [
+              ...this.state.addresses.slice(0, index),
+              Object.assign({}, this.state.addresses[index], addressAttributes),
+              ...this.state.addresses.slice(index + 1)
+            ]
+          });
+        }
+      });
     
-    
-    
-    // testing
-    // let i;
-    // for (i = 0; i < addresses.length; i++) {
-    //   const addressBalance = litecoinAddresses[addresses[i]];
-    //   console.log(addressBalance);
-    //   const updateAddress = addresses[i];
-    //   const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-    //   const addressAttributes = {
-    //     cryptoAmount: addressBalance,
-    //     fiatAmount: addressBalance * this.props.fiatPrice
-    //   };
-    //   this.setState({
-    //     addresses: [
-    //       ...this.state.addresses.slice(0, index),
-    //       Object.assign({}, this.state.addresses[index], addressAttributes),
-    //       ...this.state.addresses.slice(index + 1)
-    //     ]
-    //   });
-    // }
     event.preventDefault();
   }
   
