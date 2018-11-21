@@ -5,7 +5,7 @@ import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, FormGroup, Popover, PopoverHeader, PopoverBody,
-         Modal, ModalHeader, ModalBody, Table, Input } from 'reactstrap';
+         Modal, ModalHeader, ModalBody, Table, Input, Alert } from 'reactstrap';
 
 import '../styles/components/addresslist/addresslist.scss';
 import Addresses from './Addresses';
@@ -21,7 +21,7 @@ class AddressList extends Component {
       cryptoId: this.props.cryptoId,
       filename: 'PaperWalletChecker.csv',
       checkbalanceState: this.props.checkbalanceState,
-      popoverOpen: false,
+      popoverOpenInfo: false,
       modal: false
     };
     
@@ -30,7 +30,7 @@ class AddressList extends Component {
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
-    this.toggle = this.toggle.bind(this);
+    this.toggleInfo = this.toggleInfo.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
   
@@ -50,9 +50,9 @@ class AddressList extends Component {
     this.setState({modal: !this.state.modal});
   }
   
-  toggle() {
+  toggleInfo() {
     this.setState({
-      popoverOpen: !this.state.popoverOpen
+      popoverOpenInfo: !this.state.popoverOpenInfo
     });
   }
   
@@ -258,11 +258,13 @@ class AddressList extends Component {
                 <Input className="col-8" id="input-address-text" innerRef={(a) => this._inputElement = a} />
                 <div className="col-4 input-address-buttons">
                   <Button className="input-address-submit" color="info" type="submit">Enter a New Paper Wallet</Button>
-                  <Button id="Popover1" onClick={this.toggle}>
+                  <Button id="Popover1" onClick={this.toggleInfo}>
                     <FontAwesomeIcon icon="question-circle" inverse className="" />
                   </Button>
                 </div>
-                <Popover className="popover" placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+                <Popover className="popover" placement="bottom" isOpen={this.state.popoverOpenInfo}
+                         target="Popover1" toggle={this.toggleInfo}
+                >
                   <PopoverHeader className="text-center">Public Addresses Only</PopoverHeader>
                   <PopoverBody>
                     <ul>

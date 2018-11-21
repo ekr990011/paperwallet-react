@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import QRCode from 'qrcode.react';
+import {Alert, Popover} from 'reactstrap';
 
 import "../styles/components/header/header.scss";
 import CryptoDropdown from "./CryptoDropdown";
@@ -32,8 +33,18 @@ class Header extends Component {
       zec: "t1d29PNHtTJHHE4jMeLJFrmRcHJNhyYxZZC",
       zcl: "ZClassic Paper Wallet Checker!",
       dcr: "Decred Paper Wallet Checker!",
-      dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi"
-    }
+      dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi",
+
+      popoverOpen: false
+    };
+    
+    this.toggle = this.toggle.bind(this)
+  }
+  
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
   }
   
   render(){
@@ -50,12 +61,22 @@ class Header extends Component {
             <QRCode value={this.state[cryptoSym]} renderAs={"svg"} className={"qrcode-canvas"} level="H" />
           </div>
           <div className="col-10">
-            <h1 className="donation-address">
+            <h1 className="donation-address" onClick={this.toggle}>
               <Clipboard text={this.state[cryptoSym]}>
                 {this.state[cryptoSym]}
                 {" "}
-                <FontAwesomeIcon icon="copy" className="copy-icon" />
+                <FontAwesomeIcon icon="copy" className="copy-icon" 
+                                 id="PopoverAddress"
+                />
               </Clipboard>
+              <Popover className="popoverAddress" placement="bottom" isOpen={this.state.popoverOpen}
+                         target="PopoverAddress" toggle={this.toggle}
+                         boundariesElement=".alert-copy-clipboard"
+                >
+                  <Alert color="warning" className="alert-copy-clipboard">
+                    Copied to Clipboard
+                  </Alert>
+                </Popover>
             </h1>
             <div className="col-10 text-center">
               <h3 className="slogan">Your Crypto Paper Wallet Checker ! 
