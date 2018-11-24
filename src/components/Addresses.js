@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import QRCode from 'qrcode.react';
 import Clipboard from 'react-clipboard-polyfill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Modal, ModalHeader, ModalBody, Button } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Button, Popover, Alert } from 'reactstrap';
 
 class Addresses extends Component {
   constructor(props) {
@@ -10,11 +10,19 @@ class Addresses extends Component {
     
     this.state = {
       modal: false,
-      address: ''
+      address: '',
+      popoverOpen: false
     };
     
+    this.toggle = this.toggle.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.createAddresses = this.createAddresses.bind(this);
+  }
+  
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
   }
   
   handleAddressState(address) {
@@ -58,14 +66,22 @@ class Addresses extends Component {
       <tbody className="theList">
         <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
           <ModalHeader toggle={this.toggleModal}>
-            <Clipboard text={address}>
+            <Clipboard text={address} onClick={this.toggle}>
               <div>
                 {address}
               </div>
               <div className="text-center">
-                <FontAwesomeIcon icon="copy" />
+                <FontAwesomeIcon icon="copy" id="PopoverAddress" />
               </div>
             </Clipboard>
+            <Popover className="popoverAddress" placement="bottom" isOpen={this.state.popoverOpen}
+                         target="PopoverAddress" toggle={this.toggle}
+                         boundariesElement=".alert-copy-clipboard"
+                >
+                  <Alert color="warning" className="alert-copy-clipboard">
+                    Copied to Clipboard
+                  </Alert>
+            </Popover>
           </ModalHeader>
           <ModalBody className="text-center">
             <QRCode value={address} level="H" className="qrcode-canvas" />

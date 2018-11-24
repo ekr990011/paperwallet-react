@@ -5,7 +5,7 @@ import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, FormGroup, Popover, PopoverHeader, PopoverBody,
-         Modal, ModalHeader, ModalBody, Table, Input, Alert } from 'reactstrap';
+         Modal, ModalHeader, ModalBody, Table, Input } from 'reactstrap';
 
 import '../styles/components/addresslist/addresslist.scss';
 import Addresses from './Addresses';

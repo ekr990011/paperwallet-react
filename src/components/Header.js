@@ -66,17 +66,17 @@ class Header extends Component {
                 {this.state[cryptoSym]}
                 {" "}
                 <FontAwesomeIcon icon="copy" className="copy-icon" 
-                                 id="PopoverAddress"
+                                 id="PopoverAddressHeader"
                 />
               </Clipboard>
               <Popover className="popoverAddress" placement="bottom" isOpen={this.state.popoverOpen}
-                         target="PopoverAddress" toggle={this.toggle}
+                         target="PopoverAddressHeader" toggle={this.toggle}
                          boundariesElement=".alert-copy-clipboard"
                 >
                   <Alert color="warning" className="alert-copy-clipboard">
                     Copied to Clipboard
                   </Alert>
-                </Popover>
+              </Popover>
             </h1>
             <div className="col-10 text-center">
               <h3 className="slogan">Your Crypto Paper Wallet Checker ! 
