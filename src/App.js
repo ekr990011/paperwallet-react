@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 
-import './App.css';
 import AddressList from './components/AddressList';
 
-library.add(faCopy);
+library.add(faCopy, faQuestionCircle);
 
 class App extends Component {
   constructor(props) {
@@ -44,7 +43,7 @@ class App extends Component {
   
   render() {
     return (
-        <div className="App">
+        <div className="App h-100">
           <Header 
             fiatPrice={this.state.fiatPrice}
             cryptoSym={this.state.cryptoSym}
