@@ -10,32 +10,37 @@ class Totals extends Component {
   }
   
   handleTotalCrypto() {
-    let totalCrypto = 0;
-
-    this.props.addresses.map(addressObject => {
-      if (addressObject.cryptoAmount !== '') {
-        totalCrypto += addressObject.cryptoAmount;
-      }
-      return 0;
-    });
-    return (
-      this.props.checkBalanceState === 'checked' ? totalCrypto : ''
-    );
+    if (this.props.checkBalanceState === 'checked') {
+      let totalCrypto = 0;
+  
+      this.props.addresses.map(addressObject => {
+        console.log(typeof addressObject.cryptoAmount);
+        if (addressObject.cryptoAmount !== '') {
+          totalCrypto += addressObject.cryptoAmount;
+        }
+        return 0;
+      });
+      return (
+        this.props.checkBalanceState === 'checked' ? totalCrypto : ''
+      );
+    }
   }
   
   handleTotalFiat() {
-    let totalFiat = 0;
-
-    this.props.addresses.map(addressObject => {
-      if (addressObject.fiatAmount !== '') {
-        totalFiat += addressObject.fiatAmount;
-      }
-      return 0;
-    });
-    
-    return (
-      this.props.checkBalanceState === 'checked' ? '$' + totalFiat.toFixed(2) : ''
-    );
+    if (this.props.checkBalanceState === 'checked') {
+      let totalFiat = 0;
+  
+      this.props.addresses.map(addressObject => {
+        if (addressObject.fiatAmount !== '') {
+          totalFiat += addressObject.fiatAmount;
+        }
+        return 0;
+      });
+      
+      return (
+        this.props.checkBalanceState === 'checked' ? '$' + totalFiat.toFixed(2) : ''
+      );
+    }
   }
     
   render(props) {

@@ -52,7 +52,6 @@ class AddressList extends Component {
   }
   
   toggleModal() {
-    console.log(this.state.modal);
     this.setState({modal: !this.state.modal});
   }
   
@@ -101,7 +100,7 @@ class AddressList extends Component {
       .then((result) => {
         let i;
         for (i = 0; i < addresses.length; i++) {
-          const addressBalance = result[1][addresses[i]];
+          const addressBalance = parseFloat(result[1][addresses[i]]);
           const updateAddress = addresses[i];
           const index = this.state.addresses.findIndex(x => x.key === updateAddress);
           const addressAttributes = {
@@ -116,6 +115,7 @@ class AddressList extends Component {
           ]
         });
         }
+        this.props.handleCheckBalanceState("checked");
       });
     
     event.preventDefault();
