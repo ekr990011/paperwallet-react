@@ -36,8 +36,6 @@ class AddressList extends Component {
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
-    this.toggleInfo = this.toggleInfo.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
   }
   
   componentDidUpdate(prevProps) {
