@@ -7,7 +7,11 @@ import {CSVLink} from 'react-csv';
 import Addresses from './Addresses';
 import Ad from './Ad';
 import Totals from './Totals';
+import {bitcoinApi} from '../apis/bitcoin';
 import {litecoinApi} from '../apis/litecoin';
+import {dashApi} from '../apis/dash';
+import {zcashApi} from '../apis/zcash';
+import {dogeApi} from '../apis/doge';
 import {fiatPriceCheck} from '../apis/fiat';
 
 class AddressList extends Component {
@@ -41,75 +45,96 @@ class AddressList extends Component {
   //     })
   // }
   
-  cryptoAmountCheck() {
-    const addresses = this.state.addresses.map(a => a.key);
-    
-    axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
-              + addresses.toString() + "&currency=" + this.props.cryptoSym)
-    .then(res => {
-      const data = res.data.balance;
-      
-      let i;
-        for (i = 0; i < addresses.length; i++) {
-          console.log(addresses[i]);
-          const addressBalance = data[addresses[i]];
-          const updateAddress = addresses[i];
-          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-          const addressAttributes = {
-            cryptoAmount: addressBalance,
-            fiatAmount: addressBalance * this.props.fiatPrice
-          };
-          this.setState({
-            addresses: [
-               ...this.state.addresses.slice(0, index),
-               Object.assign({}, this.state.addresses[index], addressAttributes),
-               ...this.state.addresses.slice(index + 1)
-            ]
-          });
-        }
-      });
-  }
+  // cryptoAmountCheck() {
+  //   const addresses = this.state.addresses.map(a => a.key);
+  //   
+  //   axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
+  //             + addresses.toString() + "&currency=" + this.props.cryptoSym)
+  //   .then(res => {
+  //     const data = res.data.balance;
+  //     
+  //     let i;
+  //       for (i = 0; i < addresses.length; i++) {
+  //         console.log(addresses[i]);
+  //         const addressBalance = data[addresses[i]];
+  //         const updateAddress = addresses[i];
+  //         const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+  //         const addressAttributes = {
+  //           cryptoAmount: addressBalance,
+  //           fiatAmount: addressBalance * this.props.fiatPrice
+  //         };
+  //         this.setState({
+  //           addresses: [
+  //              ...this.state.addresses.slice(0, index),
+  //              Object.assign({}, this.state.addresses[index], addressAttributes),
+  //              ...this.state.addresses.slice(index + 1)
+  //           ]
+  //         });
+  //       }
+  //     });
+  // }
   
-  bitcoinAmountCheck() {
-    const addresses = this.state.addresses.map(a => a.key);
-  
-    axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
-      .then(res => {
-        const data = res.data;
-        let i;
-        for (i = 0; i < addresses.length; i++) {
-          const addressBalance = data[addresses[i]].final_balance / 100000000;
-          const updateAddress = addresses[i];
-          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-          const addressAttributes = {
-            cryptoAmount: addressBalance,
-            fiatAmount: addressBalance * this.props.fiatPrice
-          };
-          this.setState({
-            addresses: [
-               ...this.state.addresses.slice(0, index),
-               Object.assign({}, this.state.addresses[index], addressAttributes),
-               ...this.state.addresses.slice(index + 1)
-            ]
-          });
-        }
-        this.props.handleCheckBalanceState("checked");
-      });
-  }
-  
+  // bitcoinAmountCheck() {
+  //   const addresses = this.state.addresses.map(a => a.key);
+  // 
+  //   axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
+  //     .then(res => {
+  //       const data = res.data;
+  //       let i;
+  //       for (i = 0; i < addresses.length; i++) {
+  //         const addressBalance = data[addresses[i]].final_balance / 100000000;
+  //         const updateAddress = addresses[i];
+  //         const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+  //         const addressAttributes = {
+  //           cryptoAmount: addressBalance,
+  //           fiatAmount: addressBalance * this.props.fiatPrice
+  //         };
+  //         this.setState({
+  //           addresses: [
+  //              ...this.state.addresses.slice(0, index),
+  //              Object.assign({}, this.state.addresses[index], addressAttributes),
+  //              ...this.state.addresses.slice(index + 1)
+  //           ]
+  //         });
+  //       }
+  //       this.props.handleCheckBalanceState("checked");
+  //     });
+  // }
+  // 
   checkBalance(event) {
+    this.props.handleCheckBalanceState("checking");
     const cryptoId = this.props.cryptoId;
     const handlefiatPrice = this.props.handlefiatPrice;
     const addresses = this.state.addresses.map(a => a.key);
-    
-    this.props.handleCheckBalanceState("checking");
+    const cryptoSym = this.props.cryptoSym;
     
     let fiatApis = new Promise(function(resolve, reject) {
-      fiatPriceCheck(cryptoId, handlefiatPrice, resolve, reject);
+          fiatPriceCheck(cryptoId, handlefiatPrice, resolve, reject);
     });
     
+    console.log("cryptoSym", cryptoSym)
     let cryptoApis = new Promise(function(resolve, reject) {
-      litecoinApi(addresses, resolve, reject);
+      console.log(cryptoSym);
+      switch(cryptoSym) {
+        case 'btc':
+          bitcoinApi(addresses, resolve, reject);
+          break;
+        case 'ltc':
+          litecoinApi(addresses, resolve, reject);
+          break;
+        case 'dash':
+          dashApi(addresses, resolve, reject);
+          break;
+        case 'zec':
+          zcashApi(addresses, resolve, reject);
+          break;
+        case 'doge':
+          dogeApi(addresses, resolve, reject);
+          break;
+        default:
+        
+          console.log("didn't get either");  
+      }
     });
     
     const balancePromises = [fiatApis, cryptoApis];
@@ -126,14 +151,14 @@ class AddressList extends Component {
           const addressAttributes = {
             cryptoAmount: addressBalance,
             fiatAmount: addressBalance * this.props.fiatPrice
-          };
-          this.setState({
-            addresses: [
-              ...this.state.addresses.slice(0, index),
-              Object.assign({}, this.state.addresses[index], addressAttributes),
-              ...this.state.addresses.slice(index + 1)
-            ]
-          });
+        };
+        this.setState({
+          addresses: [
+            ...this.state.addresses.slice(0, index),
+            Object.assign({}, this.state.addresses[index], addressAttributes),
+            ...this.state.addresses.slice(index + 1)
+          ]
+        });
         }
       });
     
