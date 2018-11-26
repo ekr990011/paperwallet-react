@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-export const litecoinApi = (addresses, resolve, reject) => {
+export const dogeApi = (addresses, resolve, reject) => {
   let addressesBalance = {};
   let addressRequests = [];
   
   addresses.forEach(address => {
-    addressRequests.push("https://chain.so/api/v2/get_address_balance/LTC/" + address + "/6");
+    addressRequests.push("https://chain.so/api/v2/get_address_balance/DOGE/" + address + "/3");
   });
   
   axios.all(addressRequests.map(l => axios.get(l)))
