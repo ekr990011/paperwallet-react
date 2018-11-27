@@ -38,7 +38,7 @@ class Header extends Component {
       popoverOpen: false
     };
     
-    this.toggle = this.toggle.bind(this)
+    this.toggle = this.toggle.bind(this);
   }
   
   toggle() {

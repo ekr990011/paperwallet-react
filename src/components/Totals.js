@@ -14,7 +14,6 @@ class Totals extends Component {
       let totalCrypto = 0;
   
       this.props.addresses.map(addressObject => {
-        console.log(typeof addressObject.cryptoAmount);
         if (addressObject.cryptoAmount !== '') {
           totalCrypto += addressObject.cryptoAmount;
         }

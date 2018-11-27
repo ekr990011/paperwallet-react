@@ -3,3 +3,10 @@ This is the npm paper wallet validator github
 
 
 Replace alert with fading div
+
+
+
+
+FIX ADDRESSES COPY
+FIX .csv EXTENSION
+FIX 
