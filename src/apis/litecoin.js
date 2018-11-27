@@ -24,7 +24,6 @@ export const litecoinApi = async (addresses, resolve, reject) => {
       }).catch((err) => {
         console.log(err.response);
       });
-      console.log('omg plx', i);
       await delay();
   }
   

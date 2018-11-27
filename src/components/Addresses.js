@@ -66,14 +66,16 @@ class Addresses extends Component {
       <tbody className="theList">
         <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
           <ModalHeader toggle={this.toggleModal}>
-            <Clipboard text={address} onClick={this.toggle}>
-              <div>
-                {address}
-              </div>
-              <div className="text-center">
-                <FontAwesomeIcon icon="copy" id="PopoverAddress" />
-              </div>
-            </Clipboard>
+            <div onClick={this.toggle}>
+              <Clipboard text={address}>
+                <div>
+                  {address}
+                </div>
+                <div className="text-center">
+                  <FontAwesomeIcon icon="copy" id="PopoverAddress" />
+                </div>
+              </Clipboard>
+            </div>
             <Popover className="popoverAddress" placement="bottom" isOpen={this.state.popoverOpen}
                          target="PopoverAddress" toggle={this.toggle}
                          boundariesElement=".alert-copy-clipboard"

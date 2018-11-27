@@ -121,6 +121,10 @@ class AddressList extends Component {
     event.preventDefault();
   }
   
+  handleFilename(event) {
+    this.setState({filename: event.target.value + '.csv'});
+  }
+  
   handleCsvImport(data) {
     data.map((row) => {
       row.map((col) => {
@@ -153,7 +157,6 @@ class AddressList extends Component {
       return null;
     });
   }
-
 
   addAddress(event) {
     const addObject = this.state.addresses;
@@ -193,10 +196,6 @@ class AddressList extends Component {
     });
   }
   
-  handleFilename(event) {
-    this.setState({filename: event.target.value});
-  }
-
   render(){
     const csvDownloadHeaders = [
       {label: 'Address', key: 'key'},
