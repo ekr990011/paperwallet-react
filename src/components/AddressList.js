@@ -63,13 +63,14 @@ class AddressList extends Component {
 
   checkBalance(event) {
     this.props.handleCheckBalanceState("checking");
-    const cryptoId = this.props.cryptoId;
+    // const cryptoId = this.props.cryptoId;
     const handlefiatPrice = this.props.handlefiatPrice;
     const addresses = this.state.addresses.map(a => a.key);
     const cryptoSym = this.props.cryptoSym;
+    const cryptoName = this.props.cryptoName;
     
     let fiatApis = new Promise(function(resolve, reject) {
-          fiatPriceCheck(cryptoId, handlefiatPrice, resolve, reject);
+          fiatPriceCheck(cryptoName, handlefiatPrice, resolve, reject);
     });
     
     let cryptoApis = new Promise(function(resolve, reject) {

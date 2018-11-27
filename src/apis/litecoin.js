@@ -16,15 +16,15 @@ export const litecoinApi = async (addresses, resolve, reject) => {
   
   let i;
   for (i = 0; i < addressRequests.length; i++) {
-      await axios.get(addressRequests[i])
-      .then((res) => {
-        const data = res.data.data;
-        console.log(data);
-        addressesBalance[data.address.toString()] = data.confirmed_balance.toString();
-      }).catch((err) => {
-        console.log(err.response);
-      });
-      await delay();
+    await axios.get(addressRequests[i])
+    .then((res) => {
+      const data = res.data.data;
+      console.log(data);
+      addressesBalance[data.address.toString()] = data.confirmed_balance.toString();
+    }).catch((err) => {
+      console.log(err.response);
+    });
+    await delay();
   }
   
   resolve(addressesBalance);
