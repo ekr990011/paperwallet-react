@@ -6,7 +6,7 @@ export const litecoinApi = async (addresses, resolve, reject) => {
   
   function delay() {
     return new Promise(resolve1 => {
-      setTimeout(() => resolve1(), 3000);
+      setTimeout(() => resolve1(), 8000);
     });
   }
   
@@ -19,12 +19,13 @@ export const litecoinApi = async (addresses, resolve, reject) => {
       await axios.get(addressRequests[i])
       .then((res) => {
         const data = res.data.data;
+        console.log(data);
         addressesBalance[data.address.toString()] = data.confirmed_balance.toString();
       }).catch((err) => {
         console.log(err.response);
       });
-      await delay();
       console.log('omg plx', i);
+      await delay();
   }
   
   resolve(addressesBalance);
