@@ -12,11 +12,4 @@ export const fiatPriceCheck = (cryptoName, handlefiatPrice, resolve, reject) => 
         console.log(error);
         reject(error);
       });
-      
-    //   , {
-    //   headers: { 
-    //   'x-apikey': 'API_KEY',
-    //   },
-    // responseType: 'json',
-    // })
 };
