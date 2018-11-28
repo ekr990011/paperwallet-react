@@ -106,61 +106,6 @@ class AddressList extends Component {
       });
   }
   
-  cryptoAmountCheck() {
-    const addresses = this.state.addresses.map(a => a.key);
-    
-    axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
-              + addresses.toString() + "&currency=" + this.props.cryptoSym)
-    .then(res => {
-      const data = res.data.balance;
-      
-      let i;
-        for (i = 0; i < addresses.length; i++) {
-          const addressBalance = data[addresses[i]];
-          const updateAddress = addresses[i];
-          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-          const addressAttributes = {
-            cryptoAmount: addressBalance,
-            fiatAmount: addressBalance * this.props.fiatPrice
-          };
-          this.setState({
-            addresses: [
-               ...this.state.addresses.slice(0, index),
-               Object.assign({}, this.state.addresses[index], addressAttributes),
-               ...this.state.addresses.slice(index + 1)
-            ]
-          });
-        }
-      });
-  }
-  
-  // bitcoinAmountCheck() {
-  //   const addresses = this.state.addresses.map(a => a.key);
-  // 
-  //   axios.get("https://blockchain.info/balance?active=" + addresses.toString().replace(/,/g, '|') + "&cors=true")
-  //     .then(res => {
-  //       const data = res.data;
-  //       let i;
-  //       for (i = 0; i < addresses.length; i++) {
-  //         const addressBalance = data[addresses[i]].final_balance / 100000000;
-  //         const updateAddress = addresses[i];
-  //         const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-  //         const addressAttributes = {
-  //           cryptoAmount: addressBalance,
-  //           fiatAmount: addressBalance * this.props.fiatPrice
-  //         };
-  //         this.setState({
-  //           addresses: [
-  //              ...this.state.addresses.slice(0, index),
-  //              Object.assign({}, this.state.addresses[index], addressAttributes),
-  //              ...this.state.addresses.slice(index + 1)
-  //           ]
-  //         });
-  //       }
-  //       this.props.handleCheckBalanceState("checked");
-  //     });
-  // }
-  // 
   checkBalance(event) {
     this.props.handleCheckBalanceState("checking");
     const cryptoId = this.props.cryptoId;
@@ -172,7 +117,6 @@ class AddressList extends Component {
           fiatPriceCheck(cryptoId, handlefiatPrice, resolve, reject);
     });
     
-    console.log("cryptoSym", cryptoSym)
     let cryptoApis = new Promise(function(resolve, reject) {
       console.log(cryptoSym);
       switch(cryptoSym) {
@@ -192,7 +136,6 @@ class AddressList extends Component {
           dogeApi(addresses, resolve, reject);
           break;
         default:
-        
           console.log("didn't get either");  
       }
     });
