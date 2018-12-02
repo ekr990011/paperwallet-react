@@ -4,12 +4,6 @@ export const litecoinApi = async (addresses, resolve, reject) => {
   let addressesBalance = {};
   let addressRequests = [];
   
-  function delay() {
-    return new Promise(resolve1 => {
-      setTimeout(() => resolve1(), 8000);
-    });
-  }
-  
   addresses.forEach(address => {
     addressRequests.push("https://api.blockchair.com/litecoin/dashboards/address/" + address);
   });
