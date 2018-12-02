@@ -17,6 +17,7 @@ class App extends Component {
       fiatPrice: 0,
       cryptoSym: "btc",
       cryptoId: 1,
+      cryptoName: "bitcoin",
       checkBalanceState: "unchecked"
     };
     
@@ -29,8 +30,8 @@ class App extends Component {
     this.setState({checkBalanceState: checkBalanceState});
   }
   
-  handleCryptoSymId(cryptoSym, cryptoId) {
-    this.setState({cryptoSym: cryptoSym, cryptoId: cryptoId});
+  handleCryptoSymId(cryptoSym, cryptoId, cryptoName) {
+    this.setState({cryptoSym: cryptoSym, cryptoId: cryptoId, cryptoName: cryptoName});
   }
   
   handleFiatPrice(price) {
@@ -55,6 +56,7 @@ class App extends Component {
             fiatPrice={this.state.fiatPrice}
             cryptoSym={this.state.cryptoSym}
             cryptoId={this.state.cryptoId}
+            cryptoName={this.state.cryptoName}
             handlefiatPrice={this.handleFiatPrice}
             checkBalanceState={this.state.checkBalanceState}
             handleCheckBalanceState={this.handleCheckBalanceState}

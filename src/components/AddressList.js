@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import WAValidator from 'wallet-address-validator';
-import axios from 'axios';
 import CSVReader from 'react-csv-reader';
 import {CSVLink} from 'react-csv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,7 +29,8 @@ class AddressList extends Component {
       filename: 'PaperWalletChecker.csv',
       checkbalanceState: this.props.checkbalanceState,
       popoverOpenInfo: false,
-      modal: false
+      modal: false,
+      progressBar: 0
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -38,50 +38,15 @@ class AddressList extends Component {
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
-    this.toggleInfo = this.toggleInfo.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.toggleInfo = this.toggleInfo.bind(this);
   }
   
   componentDidUpdate(prevProps) {
     this.clearAddresses(prevProps);
   }
   
-  // fiatPriceCheck() {
-  //   axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
-  //     .then(res => {
-  //       const price = res.data.data.quotes.USD.price;
-  //       this.props.handlefiatPrice(price);
-  //     })
-  // }
-  
-  // cryptoAmountCheck() {
-  //   const addresses = this.state.addresses.map(a => a.key);
-  //   
-  //   axios.get("https://multiexplorer.com/api/address_balance/private5?addresses="
-  //             + addresses.toString() + "&currency=" + this.props.cryptoSym)
-  //   .then(res => {
-  //     const data = res.data.balance;
-  //     
-  //     let i;
-  //       for (i = 0; i < addresses.length; i++) {
-  //         console.log(addresses[i]);
-  //         const addressBalance = data[addresses[i]];
-  //         const updateAddress = addresses[i];
-  //         const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-  //         const addressAttributes = {
-  //           cryptoAmount: addressBalance,
-  //           fiatAmount: addressBalance * this.props.fiatPrice
-  //         };
-  //         this.setState({
-  //           addresses: [
-  //              ...this.state.addresses.slice(0, index),
-  //              Object.assign({}, this.state.addresses[index], addressAttributes),
-  //              ...this.state.addresses.slice(index + 1)
-  //           ]
-  //         });
-  //       }
-  //     });
-  // }
+
   clearAddresses(prevProps) {
     if (prevProps.cryptoSym !== this.props.cryptoSym) {
       this.setState({addresses: []});
@@ -99,28 +64,20 @@ class AddressList extends Component {
       popoverOpenInfo: !this.state.popoverOpenInfo
     });
   }
-  
-  fiatPriceCheck() {
-    axios.get("https://api.coinmarketcap.com/v2/ticker/" + this.props.cryptoId + "/")
-      .then(res => {
-        const price = res.data.data.quotes.USD.price;
-        this.props.handlefiatPrice(price);
-      });
-  }
-  
+
   checkBalance(event) {
     this.props.handleCheckBalanceState("checking");
-    const cryptoId = this.props.cryptoId;
+    // const cryptoId = this.props.cryptoId;
     const handlefiatPrice = this.props.handlefiatPrice;
     const addresses = this.state.addresses.map(a => a.key);
     const cryptoSym = this.props.cryptoSym;
+    const cryptoName = this.props.cryptoName;
     
     let fiatApis = new Promise(function(resolve, reject) {
-          fiatPriceCheck(cryptoId, handlefiatPrice, resolve, reject);
+      fiatPriceCheck(cryptoName, handlefiatPrice, resolve, reject);
     });
     
     let cryptoApis = new Promise(function(resolve, reject) {
-      console.log(cryptoSym);
       switch(cryptoSym) {
         case 'btc':
           bitcoinApi(addresses, resolve, reject);
@@ -152,11 +109,9 @@ class AddressList extends Component {
     
     Promise.all(balancePromises)
       .then((result) => {
-        console.log(result[1]);
         let i;
         for (i = 0; i < addresses.length; i++) {
-          const addressBalance = result[1][addresses[i]];
-          console.log(addressBalance);
+          const addressBalance = parseFloat(result[1][addresses[i]]);
           const updateAddress = addresses[i];
           const index = this.state.addresses.findIndex(x => x.key === updateAddress);
           const addressAttributes = {
@@ -171,9 +126,14 @@ class AddressList extends Component {
           ]
         });
         }
+        this.props.handleCheckBalanceState("checked");
       });
     
     event.preventDefault();
+  }
+  
+  handleFilename(event) {
+    this.setState({filename: event.target.value + '.csv'});
   }
   
   handleCsvImport(data) {
@@ -208,7 +168,6 @@ class AddressList extends Component {
       return null;
     });
   }
-
 
   addAddress(event) {
     const addObject = this.state.addresses;
@@ -248,10 +207,6 @@ class AddressList extends Component {
     });
   }
   
-  handleFilename(event) {
-    this.setState({filename: event.target.value});
-  }
-
   render(){
     const csvDownloadHeaders = [
       {label: 'Address', key: 'key'},
