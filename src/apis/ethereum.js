@@ -1,11 +1,12 @@
 import axios from 'axios';
 
-export const litecoinApi = async (addresses, resolve, reject) => {
+export const ethApi = async (addresses, resolve, reject) => {
   let addressesBalance = {};
   let addressRequests = [];
   
   addresses.forEach(address => {
-    addressRequests.push("https://api.blockchair.com/litecoin/dashboards/address/" + address);
+    addressRequests.push("https://api.blockchair.com/ethereum/dashboards/address/" 
+    + address);
   });
   
   function delay() {
@@ -18,8 +19,10 @@ export const litecoinApi = async (addresses, resolve, reject) => {
     axios.get(addressRequests)
     .then((res) => {
       console.log(res);
-      const data = res.data.data[addresses];
-      console.log('data', data.address.balance);
+      // addresses = addresses.toLowerCase();
+      console.log('address', addresses);
+      const data = res.data.data[addresses.toLowerCase()];
+      console.log('data', data);
       addressesBalance[addresses] = data.address.balance / 100000000;
     }).catch((error) => {
       console.log(error);
