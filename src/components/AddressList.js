@@ -10,10 +10,12 @@ import '../styles/components/addresslist/addresslist.scss';
 import Addresses from './Addresses';
 import Totals from './Totals';
 import {bitcoinApi} from '../apis/bitcoin';
-import {litecoinApi} from '../apis/litecoin';
+import {bchApi} from '../apis/bitcoincash';
 import {dashApi} from '../apis/dash';
-import {zcashApi} from '../apis/zcash';
 import {dogeApi} from '../apis/doge';
+import {ethApi} from '../apis/ethereum';
+import {litecoinApi} from '../apis/litecoin';
+import {zcashApi} from '../apis/zcash';
 import {fiatPriceCheck} from '../apis/fiat';
 
 class AddressList extends Component {
@@ -44,6 +46,7 @@ class AddressList extends Component {
     this.clearAddresses(prevProps);
   }
   
+
   clearAddresses(prevProps) {
     if (prevProps.cryptoSym !== this.props.cryptoSym) {
       this.setState({addresses: []});
@@ -90,6 +93,12 @@ class AddressList extends Component {
           break;
         case 'doge':
           dogeApi(addresses, resolve, reject);
+          break;
+        case 'bch':
+          bchApi(addresses, resolve, reject);
+          break;
+        case 'eth':
+          ethApi(addresses, resolve, reject);
           break;
         default:
           console.log("didn't get either");  
