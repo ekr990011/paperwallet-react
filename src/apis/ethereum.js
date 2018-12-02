@@ -23,7 +23,7 @@ export const ethApi = async (addresses, resolve, reject) => {
       console.log('address', addresses);
       const data = res.data.data[addresses.toLowerCase()];
       console.log('data', data);
-      addressesBalance[addresses] = data.address.balance / 100000000;
+      addressesBalance[addresses] = data.address.balance / 1.0e18;
     }).catch((error) => {
       console.log(error);
     });
