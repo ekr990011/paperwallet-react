@@ -27,7 +27,8 @@ class AddressList extends Component {
       filename: 'PaperWalletChecker.csv',
       checkbalanceState: this.props.checkbalanceState,
       popoverOpenInfo: false,
-      modal: false
+      modal: false,
+      progressBar: 0
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -42,7 +43,7 @@ class AddressList extends Component {
   componentDidUpdate(prevProps) {
     this.clearAddresses(prevProps);
   }
-
+  
   clearAddresses(prevProps) {
     if (prevProps.cryptoSym !== this.props.cryptoSym) {
       this.setState({addresses: []});
@@ -70,7 +71,7 @@ class AddressList extends Component {
     const cryptoName = this.props.cryptoName;
     
     let fiatApis = new Promise(function(resolve, reject) {
-          fiatPriceCheck(cryptoName, handlefiatPrice, resolve, reject);
+      fiatPriceCheck(cryptoName, handlefiatPrice, resolve, reject);
     });
     
     let cryptoApis = new Promise(function(resolve, reject) {
