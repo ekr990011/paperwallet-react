@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-export const dashApi = async (addresses, resolve, reject) => {
+export const ethApi = async (addresses, resolve, reject) => {
   let addressesBalance = {};
   let addressRequests = [];
   
+  addresses.forEach(address => {
+    addressRequests.push("https://api.blockchair.com/ethereum/dashboards/address/" 
+    + address);
+  });
   
-  for (let  j=0; j<addresses.length; j++ )
-    addressRequests.push("https://api.blockcypher.com/v1/dash/main/addrs/" + 
-      addresses[j] + "/balance");
-    
   function delay() {
     return new Promise(resolve => {
       setTimeout(() => resolve(), 2000);
@@ -19,9 +19,11 @@ export const dashApi = async (addresses, resolve, reject) => {
     axios.get(addressRequests)
     .then((res) => {
       console.log(res);
-      const data = res.data.balance;
+      // addresses = addresses.toLowerCase();
+      console.log('address', addresses);
+      const data = res.data.data[addresses.toLowerCase()];
       console.log('data', data);
-      addressesBalance[addresses] = data / 100000000;
+      addressesBalance[addresses] = data.address.balance / 1.0e18;
     }).catch((error) => {
       console.log(error);
     });
@@ -33,6 +35,4 @@ export const dashApi = async (addresses, resolve, reject) => {
     await delay();
   }
   resolve(addressesBalance);
-  console.log('addressesBalance', addressesBalance)
 };
-  

@@ -1,0 +1,61 @@
+.address-list {
+  margin-top: 1rem;
+  font-size: 1.09vw;
+}
+
+.export-filename {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-left: 0.7rem;
+}
+
+.input-form {
+  font-size: 1.09vw;
+}
+
+#input-address-text {
+  // width: 60%;
+}
+
+.input-address-buttons > .btn {
+  font-size: 0.98rem;
+}
+
+.input-address-submit {
+  margin-left: 0.3vw;
+  margin-right: 0.3vw;
+}
+
+.popover {
+  border-radius: 3rem;
+}
+
+.popover-header, .popover-body {
+  background-color: #5f5f5f;
+  color: white;
+}
+
+.modal-title {
+  color: black;
+}
+
+.csv-import {
+  color: black;
+}
+
+.address-buttons {
+  font-size: 1.09vw;
+}
+
+.address-buttons > .btn-success {
+  margin-bottom: 5%;
+}
+
+.address-buttons > form > .btn-primary {
+  margin-top: 5%;
+  margin-bottom: 4%;
+}
+
+.address-buttons > .btn-warning {
+  color: white;
+}
